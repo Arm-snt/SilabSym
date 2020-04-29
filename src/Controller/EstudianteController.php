@@ -82,8 +82,8 @@ class EstudianteController extends AbstractController
         $content = json_decode($request->getContent());
  
         if ($todo->getCodigo() === $content->codigo && $todo->getNombre() === $content->nombre && $todo->getPrograma() === $content->programa) {
-            return $this->json([
-                'message' => 'No hubo cambios'
+            return $this->json([                
+                'message' => ['text'=>['No se realizaron cambios al estudiante: '.$todo->getNombre()] , 'level'=>'warning']
             ]);
         }
 
@@ -107,12 +107,15 @@ class EstudianteController extends AbstractController
     }
 
     /**
-     * @Route("/delete/{id}", name="api_estudiante_delete")
+     * @Route("/delete/{id}", name="api_estudiante_delete", methods={"DELETE"})
+     * @param Request $request
      * @param Estudiante $todo
      * @return JsonResponse
      */
-    public function delete(Estudiante $todo)
+    public function delete(Request $request,Estudiante $todo)
     {
+        $content = json_decode($request->getContent());
+
         try {
             $this->entityManager->remove($todo);
             $this->entityManager->flush();
@@ -123,7 +126,7 @@ class EstudianteController extends AbstractController
         }
  
         return $this->json([
-            'message' => ['text'=>['Se ha eliminado la informacion del Estudiante: '.$content->nombre] , 'level'=>'success']
+            'message' => ['text'=>['Se ha eliminado la informacion del Estudiante: '.$todo->getNombre()] , 'level'=>'success']
         ]);
  
     }
