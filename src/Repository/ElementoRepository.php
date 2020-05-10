@@ -19,6 +19,20 @@ class ElementoRepository extends ServiceEntityRepository
         parent::__construct($registry, Elemento::class);
     }
 
+    public function BuscarElementoPorId($id){
+        return $this->getEntityManager()
+            ->createQuery(
+                '
+                    SELECT elemento.id, elemento.codelemento, elemento.elemento, elemento.horauso, elemento.stock, elemento.categoria, elemento.estado, 
+                    FROM App\Entity\Elemento elemento
+                    WHERE elemento.id=:identificacion
+                '
+            )
+            ->setParameter('identificacion',$id)
+            ->getSingleResult()
+            ;
+    }
+
     // /**
     //  * @return Elemento[] Returns an array of Elemento objects
     //  */

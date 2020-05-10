@@ -30,13 +30,12 @@ class EstudianteController extends AbstractController
      * @param Request $request
      * @return JsonResponse
      */
-    //
+    
     public function create(Request $request)
     {
         $content = json_decode($request->getContent());
 
         $todo = new Estudiante();
- 
         $todo->setCodigo($content->codigo);
         $todo->setNombre($content->nombre);
         $todo->setPrograma($content->programa);
@@ -47,7 +46,7 @@ class EstudianteController extends AbstractController
 
         } catch (Exception $exception) {
             return $this->json([ 
-                'message' => ['text'=>['El Estudiante no se ha podido registrar!'] , 'level'=>'error']
+                'message' => ['text'=>['El Estudiante no se ha podido registrar!'.$exception] , 'level'=>'error']
                 ]);
         }  
 
@@ -131,9 +130,4 @@ class EstudianteController extends AbstractController
  
     }
 
-
-
-
-    
-  
 }

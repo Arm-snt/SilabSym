@@ -7,20 +7,20 @@ function DeleteDialog(props) {
   const context = useContext(TodoContext);
 
   const hide = () => {
-    props.setDeleteConfirmationIsShown(false);
+    props.setEliminarVisible(false);
   };  
 
   return (
     <Dialog onClose={hide} fullWidth={true} maxWidth="sm" open={props.open}>
       <DialogTitle>¿Dese eliminar este registro?</DialogTitle>
-      <DialogContent>{props.todo.nombre}</DialogContent>
+      <DialogContent>{props.todo.elemento}</DialogContent>
       <DialogActions>
         <Button onClick={hide}>Cancelar</Button>
         <Button
           onClick={() => {
             context.deleteTodo({
               id: props.todo.id,
-              nombre: props.todo.nombre,
+              elemento: props.todo.elemento,
             });
             hide();
           }}
@@ -34,10 +34,10 @@ function DeleteDialog(props) {
 
 DeleteDialog.propTypes = {
   open: PropTypes.bool.isRequired,
-  setDeleteConfirmationIsShown: PropTypes.func.isRequired,
+  setEliminarVisible: PropTypes.func.isRequired,
   todo: PropTypes.shape({
     id: PropTypes.number.isRequired,
-    nombre: PropTypes.string.isRequired,
+    elemento: PropTypes.string.isRequired,
   }),
 };
 

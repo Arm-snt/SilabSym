@@ -27,16 +27,10 @@ import NuevoMantenimiento from "./components/vistas/bitacora/mantenimientos/Nuev
 //import Trabajos from "./components/vistas/bitacora/trabajos/Trabajos";
 import NuevoTrabajo from "./components/vistas/bitacora/trabajos/NuevoTrabajo";
 import Trabajo from "./components/vistas/bitacora/trabajos/Trabajo";
-//import EditarTrabajo from "./components/vistas/bitacora/trabajos/EditarTrabajo";
-//import countries from "./countries";
-//import AutoCompleteText from "./AutoCompleteText";
-//import Search from "../src/Search";
-//import "../src/Search/style.css";
-//import PersonList from "./components/PersonList";
-//import PersonInput from "./components/PersonInput";
 import TabPanel from "./components/vistas/bitacora/prestamos/TabPanel";
 import TabEstudiante from "./components/seguridad/personas/estudiantes/TabEstudiante"
 import Contexts from "./components/contexts/Contexts";
+import TabElemento from "./components/vistas/almacen/elementos/TabElemento";
 
 function App(props) {
   return (
@@ -45,10 +39,11 @@ function App(props) {
         <AppNavBar />
         <Grid container>
           <Switch>
-            <Route path="/elementos" exact component={Elementos}></Route>
             <Route path="/mensajes" exact component={Contexts}></Route>
+            {/*<Route path="/elementos" exact component={Elementos}></Route>
             <Route path="/elemento/nuevo" exact component={NuevoElemento} ></Route>
-            <Route path="/elemento/editar" exact component={EditarElemento} ></Route>
+            <Route path="/elemento/editar" exact component={EditarElemento} ></Route>*/}
+            <Route path="/elementos" exact component={TabElemento}></Route>
             <Route path="/Prestamos" exact component={TabPanel}></Route> 
             <Route path="/auth/login" exact component={Login}></Route>
             <Route path="/auth/perfil" exact component={PerfilUsuario}></Route>

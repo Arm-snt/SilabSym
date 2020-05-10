@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Elemento;
 use App\Repository\ElementoRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -26,6 +25,39 @@ class ElementoController extends AbstractController
 
         $this->entityManager = $entityManager;
         $this->elementoRepository = $elementoRepository;
+    }
+
+    /**
+     * @Route("/create", name="api_elemento_create", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+    */
+
+    public function create(Request $request)
+    {
+        $content = json_decode($request->getContent());
+
+        $todo = new Elemento();
+        $todo->setCodElemento($content->codelemento);
+        $todo->setElemento($content->elemento);
+        $todo->setStock($content->stock);
+        $todo->setHoraUso($content->horauso);
+        $todo->setCategoria($content->categoria);
+        $todo->setEstado($content->estado);
+
+        try{
+            $this->entityManager->persist($todo);
+            $this->entityManager->flush();
+        }catch (Exception $exception){
+            return $this->json([ 
+                'message' => ['text'=>['El Elemento no se ha podido registrar!'.$exception] , 'level'=>'error']
+                ]);
+        }
+
+        return $this->json([ 
+            'todo' => $todo->toArray(),
+            'message' => ['text'=>['El Elemento: '.$content->elemento, ', se ha registrado!'] , 'level'=>'success']
+            ]);
 
     }
 
@@ -35,86 +67,72 @@ class ElementoController extends AbstractController
 
     public function read()
     {
-        $elementos = $this->elementoRepository->findAll();
-        $arrayOfElementos = [];
-        foreach ($elementos as $elemento){
-            $arrayOfElementos[]=$elemento->toArray();
+        $todos = $this->elementoRepository->findAll();
+        $arrayOfTodos = [];
+        foreach ($todos as $todo){
+            $arrayOfTodos[]=$todo->toArray();
         }
-        return $this->json($arrayOfElementos);
+        return $this->json($arrayOfTodos);
     }
 
-        /**
-         * @Route("/create", name="api_elemento_create", methods={"POST"})
-         * @param Request $request
-         * @return JsonResponse
-        */
+    /**
+     * @Route("/update/{id}", name="api_elemento_update", methods={"PUT"})
+     * @param Request $request
+     * @param Elemento $todo
+     * @return JsonResponse
+    */
 
-    public function create(Request $request)
+    public function update(Request $request, Elemento $todo)
     {
         $content = json_decode($request->getContent());
-        $elemento = new Elemento();
-        $elemento->setCodElemento($content->codelemento);
-        $elemento->setElemento($content->elemento);
-        $elemento->setStock($content->Stock);
-        $elemento->setHoraUso($content->horauso);
-        $elemento->setCategoria($content->categoria);
-        $elemento->setEstado($content->estado);
 
-        try{
-            $this->entityManager->persist($elemento);
-            $this->entityManager->flush();
-            return $this->json([
-                'elemento'=>$elemento->toArray(),
+        if($todo->getCodElemento()===$content->codelemento && $todo->getElemento()===$content->elemento && $todo->getStock()===$content->stock && $todo->getHoraUso()===$content->horauso && $todo->getCategoria()===$content->categoria && $todo->getEstado()===$content->estado){
+            return $this->json([                
+                'message' => ['text'=>['No se realizaron cambios al elemento: '.$todo->getElemento()] , 'level'=>'warning']
             ]);
-        }catch (Exception $exception){
-            //errrorr messaggeeeeeee
         }
-    }
 
-        /**
-         * @Route("/update", name="api_elemento_update", methods={"PUT"})
-         * @param Request $request
-         * @param Elemento $elemento
-         * @return JsonResponse
-        */
-
-    public function update(Request $request, Elemento $elementoRepository)
-    {
-        $content = json_decode($request->getContent());
-        $elemento->setCodElemento($content->codelemento);
-        $elemento->setElemento($content->elemento);
-        $elemento->setStock($content->Stock);
-        $elemento->setHoraUso($content->horauso);
-        $elemento->setCategoria($content->categoria);
-        $elemento->setEstado($content->estado);
+        $todo->setCodElemento($content->codelemento);
+        $todo->setElemento($content->elemento);
+        $todo->setStock($content->stock);
+        $todo->setHoraUso($content->horauso);
+        $todo->setCategoria($content->categoria);
+        $todo->setEstado($content->estado);
 
         try{
             $this->entityManager->flush();
         }catch (Exception $exception){
-            //errrorr messaggeeeeeee
-        }
-
+            return $this->json([ 
+                'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se actualizaba al elemento!'] , 'level'=>'error']
+                ]);
+            }
         return $this->json([
-            'message'=>'Elemento Actualizado',
+            'todo'    => $todo->toArray(),
+            'message' => ['text'=>['Se ha actualizado la informacion del Elemento: '.$content->elemento] , 'level'=>'success']
         ]);
     }
     
-        /**
-         * @Route("/delete/{id}", name="api_elemento_delete", methods={"DELETE"})
-         * @param Elemento $elemento
-         * @return JsonResponse
-        */
+    /**
+     * @Route("/delete/{id}", name="api_elemento_delete", methods={"DELETE"})
+     * @param Request $request
+     * @param Elemento $todo
+     * @return JsonResponse
+    */
 
-    public function delete  (Elemento $elemento )
+    public function delete  (Request $request,Elemento $todo )
     {
+        $content = json_decode($request->getContent());
+
          try{
-            $this->entityManager->remove($elemento);
+            $this->entityManager->remove($todo);
             $this->entityManager->flush();
         }catch (Exception $exception){
-            //errrorr messaggeeeeeee
+            return $this->json([ 
+                'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se eliminaba el elemento!'] , 'level'=>'error']
+                ]);
         }
         return $this->json([
-            'message'=>'Elemento Eliminado',
+            'message' => ['text'=>['Se ha eliminado el registro del elemento: '.$todo->getElemento()] , 'level'=>'success']
         ]);
     }
     

@@ -57,7 +57,7 @@ const style = {
         { state: "Ingeniería Mecánica" },
         { state: "Ingeniería de Sistemas" },
       ];
-
+      
       return (
         <Container
         style={style.container}

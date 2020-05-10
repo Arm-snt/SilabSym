@@ -1,27 +1,14 @@
-import React, { useState, Fragment } from "react";
-import {
-  Container,
-  Paper,
-  Grid,
-  Breadcrumbs,
-  Link,
-  Avatar,
-  IconButton,
-  Collapse,
-  Typography,
-  TextField,
-  Button
-} from "@material-ui/core";
-import HomeIcon from "@material-ui/icons/Home";
-import { Alert, Autocomplete } from "@material-ui/lab";
-import { Close as CloseIcon } from "@material-ui/icons";
+import React, { useContext, useState, Fragment } from "react";
+import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, IconButton, Divider, Button,} from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
+import { TodoContext } from "./TodoContext";
 
 const style = {
   container: {
     paddingTop: "20px"
   },
   paper: {
-    marginTop: 8,
+    marginTop: 15,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -29,109 +16,56 @@ const style = {
     backgroundColor: "#f5f5f5"
   },
   link: {
-    display: "flex"
-  },
-  homeIcon: {
-    width: 20,
-    height: 20,
-    marginRight: "4px"
+    display: "flex",
   },
   form: {
-    width: "100%"
+    width: "100%",
   },
   submit: {
-    marginTop: 30,
-    marginBottom: 20
-  },
-  avatar: {
-    margin: 25,
-    backgroundColor: "#e53935"
-  },
-  error: {
     marginTop: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
+  space: {
+    paddingTop: "20px",
+  },
 };
 
-const NuevoElemento = props => {
-  //crear state de usuario
-  const [perfil, cambiarPerfil] = useState({
-    codigo: "",
-    nombre: "",
-    stock: "",
-    horas_uso: "",
-    estado: "",
-    categoria: "",
-    tiempo_prestamo: "",
-    sancion: "",
-    multa: ""
-  });
+function NuevoElemento (){
+  //crear state del elemento
+  const context = useContext(TodoContext);
+  const [CodElemento, setCodElemento]=useState("");
+  const [Elemento,setElemento]=useState("");
+  const [Stock,setStock]=useState("");
+  const [HoraUso,setHoraUso]=useState("");
+  const [Categoria,setCategoria]=useState("");
+  const [Estado,setEstado]=useState("");
 
-  //crear state de error
-  const [error, actualizarError] = useState(false);
-
-  //funcion para cuando el usuario escribe en los inputs
-  const cambiarDato = e => {
-    const { name, value } = e.target;
-    cambiarPerfil(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  //Extraer los valores de los inputs
-  const {
-    codigo,
-    nombre,
-    stock,
-    horas_uso,
-    estado,
-    categoria,
-    tiempo_prestamo,
-    sancion,
-    multa
-  } = perfil;
-
-  //funcion para cuando el usuario envia la informacion
-  const submitPerfil = e => {
-    e.preventDefault();
-    if (
-      codigo === "" ||
-      nombre === "" ||
-      stock === "" ||
-      horas_uso === "" ||
-      estado === "" ||
-      categoria === "" ||
-      tiempo_prestamo === "" ||
-      sancion === "" ||
-      multa === ""
-    ) {
-      actualizarError(true);
-      return;
-    }
-
-    console.log(perfil);
-    actualizarError(false);
-
-    //Agregar Usuario o Actualizar
-
-    //Reiniciar el form
-    cambiarPerfil({
-      codigo: "",
-      nombre: "",
-      stock: "",
-      horas_uso: "",
-      estado: "",
-      categoria: "",
-      tiempo_prestamo: "",
-      sancion: "",
-      multa: ""
+  const onCreateSubmit = (event) =>{
+    event.preventDefault();
+    context.createTodo(event, {
+      codelemento: CodElemento,
+      elemento: Elemento,
+      stock: Stock,
+      horauso: HoraUso,
+      categoria: Categoria,
+      estado: Estado,
     });
-  };
+    setCodElemento("");
+    setElemento("");
+    setStock("");
+    setHoraUso("");
+    setCategoria("");
+    setEstado("");
+  }
 
-  const estadoele = [{ state: "Activo" }, { state: "Inactivo" }];
-  const detalles = [{ state: "A" }, { state: "B" }, { state: "C" }];
-  const detalles1 = [
+  function historyBack() {
+    window.history.back();
+  }
+
+  const estado = [{ state: "Activo" }, { state: "Inactivo" }];
+  const categoria = [{ state: "A" }, { state: "B" }, { state: "C" }];
+
+  /*const detalles1 = [
     { state: "2 Horas" },
     { state: "4 Horas" },
     { state: "1 Semana" }
@@ -145,113 +79,70 @@ const NuevoElemento = props => {
     { state: "1 Día" },
     { state: "1 Mes" },
     { state: "1 Semestre" }
-  ];
+  ];*/
 
   return (
-    <Fragment>
       <Container
         style={style.container}
         component="main"
         maxWidth="lg"
-        justify="center"
-      >
+        justify="center">
         <Paper style={style.paper}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link color="inherit" style={style.link} href="/elementos">
-                  <HomeIcon style={style.homeIcon} />
-                  Elementos
-                </Link>
-                <Typography color="textPrimary">Actualizar Elemento</Typography>
-              </Breadcrumbs>
-            </Grid>
-          </Grid>
-
-          <Collapse in={error} style={style.error}>
-            <Alert
-              variant="filled"
-              severity="error"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  onClick={() => {
-                    actualizarError(false);
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-            >
-              ¡Tiene que llenar todos los campos!
-            </Alert>
-          </Collapse>
-
-          <form style={style.form} onSubmit={submitPerfil}>
+          <form style={style.form}>
             <Grid container spacing={2}>
               <Grid item xs={6} md={4}>
                 <TextField
                   name="codigo"
                   label="Código del elemento"
-                  fullWidth
-                  value={codigo}
-                  onChange={cambiarDato}
-                />
+                  fullWidth={true}
+                  value={CodElemento}
+                  onChange={(event) => {
+                    setCodElemento(event.target.value);
+                }}/>
               </Grid>
               <Grid item xs={6} md={4}>
                 <TextField
                   name="nombre"
                   label="Nombre del elemento"
                   fullWidth
-                  value={nombre}
-                  onChange={cambiarDato}
-                />
+                  value={Elemento}
+                  onChange={(event) => {
+                    setElemento(event.target.value);
+                }}/>
               </Grid>
               <Grid item xs={6} md={4}>
                 <TextField
                   name="stock"
                   label="Stock"
                   fullWidth
-                  value={stock}
-                  onChange={cambiarDato}
-                />
+                  value={Stock}
+                  onChange={(event) => {
+                    setStock(event.target.value);
+                }}/>
               </Grid>
-
               <Grid item xs={6} md={4}>
                 <TextField
                   name="horas_uso"
                   label="Horas de uso"
                   fullWidth
-                  value={horas_uso}
-                  onChange={cambiarDato}
-                />
+                  value={HoraUso}
+                  onChange={(event) => {
+                    setHoraUso(event.target.value);
+                }}/>
               </Grid>
-
               <Grid item xs={6} md={4}>
                 <Autocomplete
                   id="combo-box-demo"
                   name="estado"
-                  options={estadoele}
-                  onChange={(event, value) => {
-                    let valor;
-                    if (value !== null) {
-                      valor = value.state;
-                    } else {
-                      valor = "";
-                    }
-                    cambiarPerfil(prev => ({
-                      ...prev,
-                      estado: valor
-                    }));
-                  }}
+                  options={estado}
+                  onChange={(e, a) => {
+                    setEstado(a !== null ? a.state : "");
+                }}
                   getOptionLabel={option => option.state}
                   renderInput={params => (
                     <TextField
                       {...params}
-                      name="estado"
-                      label="Seleccione un estado"
-                    />
+                      label="Seleccione un estado"/>
                   )}
                 />
               </Grid>
@@ -260,18 +151,9 @@ const NuevoElemento = props => {
                 <Autocomplete
                   id="combo-box-demo"
                   name="categoria"
-                  options={detalles}
-                  onChange={(event, value) => {
-                    let valor;
-                    if (value !== null) {
-                      valor = value.state;
-                    } else {
-                      valor = "";
-                    }
-                    cambiarPerfil(prev => ({
-                      ...prev,
-                      categoria: valor
-                    }));
+                  options={categoria}
+                  onChange={(e, a) => {
+                    setCategoria(a !== null ? a.state : "");
                   }}
                   getOptionLabel={option => option.state}
                   renderInput={params => (
@@ -279,95 +161,51 @@ const NuevoElemento = props => {
                   )}
                 />
               </Grid>
-              <Grid item xs={6} md={4}>
+              
+              
+                <Grid item xs={6} md={4}>
                 <Autocomplete
                   id="combo-box-demo"
-                  name="tiempo_prestamo"
-                  options={detalles1}
-                  onChange={(event, value) => {
-                    let valor;
-                    if (value !== null) {
-                      valor = value.state;
-                    } else {
-                      valor = "";
-                    }
-                    cambiarPerfil(prev => ({
-                      ...prev,
-                      tiempo_prestamo: valor
-                    }));
-                  }}
-                  getOptionLabel={option => option.state}
+                  name="estado"
+                  options={context.todos}
+                  getOptionLabel={option => (option.codelemento+" - "+option.elemento)}
                   renderInput={params => (
-                    <TextField {...params} label="Seleccione el tiempo" />
+                    <TextField
+                      {...params}
+                      label="Seleccione un elemento"/>
                   )}
                 />
               </Grid>
-              <Grid item xs={6} md={4}>
-                <Autocomplete
-                  id="combo-box-demo"
-                  name="sancion"
-                  options={detalles2}
-                  onChange={(event, value) => {
-                    let valor;
-                    if (value !== null) {
-                      valor = value.state;
-                    } else {
-                      valor = "";
-                    }
-                    cambiarPerfil(prev => ({
-                      ...prev,
-                      sancion: valor
-                    }));
-                  }}
-                  getOptionLabel={option => option.state}
-                  renderInput={params => (
-                    <TextField {...params} label="Seleccione la sanción" />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={6} md={4}>
-                <Autocomplete
-                  id="combo-box-demo"
-                  name="multa"
-                  options={detalles3}
-                  onChange={(event, value) => {
-                    let valor;
-                    if (value !== null) {
-                      valor = value.state;
-                    } else {
-                      valor = "";
-                    }
-                    cambiarPerfil(prev => ({
-                      ...prev,
-                      multa: valor
-                    }));
-                  }}
-                  getOptionLabel={option => option.state}
-                  renderInput={params => (
-                    <TextField {...params} label="Seleccione la multa" />
-                  )}
-                />
-              </Grid>
+          
 
-              <Grid container justify="center">
-                <Grid item xs={3} md={4}>
+              <Grid container spacing={2} justify="center">
+                <Grid item xs={3} md={3}>
                   <Button
-                    type="submit"
                     variant="contained"
                     fullWidth
                     size="medium"
                     color="primary"
                     style={style.submit}
-                  >
+                    onClick={onCreateSubmit}>
                     Guardar
                   </Button>
                 </Grid>
-              </Grid>
+                <Grid item xs={3} md={3}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    size="medium"
+                    color="secondary"
+                    style={style.submit}
+                    onClick={historyBack}>
+                    Cancelar
+                  </Button>
+                </Grid>
+              </Grid>              
             </Grid>
           </form>
         </Paper>
       </Container>
-    </Fragment>
   );
 };
 

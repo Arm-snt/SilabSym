@@ -6,9 +6,9 @@ import EstSnackBar from "./EstSnackBar";
 export default function Form(){
     return(
         <Fragment>
-            <TodoContextProvider>       
+            <TodoContextProvider>
                 <FormEstudiante/>
-                <EstSnackBar/>      
+                <EstSnackBar/>         
             </TodoContextProvider>
         </Fragment>
     );
