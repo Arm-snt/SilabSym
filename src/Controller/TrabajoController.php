@@ -42,25 +42,23 @@ class TrabajoController extends AbstractController
     public function create(Request $request)
     {
         $content = json_decode($request->getContent(), true);
-        dd($content);
-        
-        $dato1=$content->estudiante_id;
-        $dato2=$content->registro;
-        $dato3=$content->descripcion;
+               
+        $dato1=$content['estudiante_id'];
+        $dato2=$content['registro'];
+        $dato3=$content['descripcion'];
         try {
             
             $todo = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
             $todo = $this->trabajoRepository->Insertar($dato1,$dato2,$dato3);
-            $this->entityManager->persist($todo);
-            $this->entityManager->flush();
                 
         } catch (Exception $exception) {
             return $this->json([ 
                 'message' => ['text'=>['El trabajo no se ha podido registrar!'.$exception] , 'level'=>'error']
                 ]);
         }  
-        return $this->json($todo);
-                      
+            return $this->json([ 'todo' => [$todo],
+                'message' => ['text'=>['El trabajo de '.$dato1, 'se ha registrado!' ] , 'level'=>'success']      
+                 ]);
     }
 
     /**

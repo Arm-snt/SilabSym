@@ -9,7 +9,7 @@ class TodoContextProvider extends Component {
 		super(props);
 		this.state = {
 			todos: [],
-			message: {},
+			message: {}
 		};
 		this.readTodo();
 	}
@@ -31,35 +31,33 @@ class TodoContextProvider extends Component {
 	//create
 	createTodo(event, todo) {
 		event.preventDefault();
-		axios.post('api/estudiante/create', todo)
-			 .then(response => {
-					if(response.data.message.level === 'success'){
-						let data = [ ...this.state.todos ];
-						data.push(response.data.todo);
-						this.setState({
-							todos: data,
-							message: response.data.message,
-						});
-					} else {
-						this.setState({
-							message: response.data.message,
-						})
-					 }
-
-
+		axios
+			.post('api/estudiante/create', todo)
+			.then((response) => {
+				if (response.data.message.level === 'success') {
+					let data = [ ...this.state.todos ];
+					data.push(response.data.todo);
+					this.setState({
+						todos: data,
+						message: response.data.message
+					});
+				} else {
+					this.setState({
+						message: response.data.message
+					});
+				}
 			})
 			.catch((error) => {
 				console.error(error);
-			}); 
+			});
 	}
-
 
 	//update
 	updateTodo(data) {
 		axios
 			.put('api/estudiante/update/' + data.id, data)
 			.then((response) => {
-				if(response.data.message.level === 'success'){
+				if (response.data.message.level === 'success') {
 					let todos = [ ...this.state.todos ];
 					let todo = todos.find((todo) => {
 						return todo.id === data.id;
@@ -67,17 +65,16 @@ class TodoContextProvider extends Component {
 					todo.codigo = response.data.todo.codigo;
 					todo.nombre = response.data.todo.nombre;
 					todo.programa = response.data.todo.programa;
-	
+
 					this.setState({
 						todos: todos,
-						message: response.data.message,
+						message: response.data.message
 					});
-				} else { 
+				} else {
 					this.setState({
-						message: response.data.message,
-					})
+						message: response.data.message
+					});
 				}
-
 			})
 			.catch((error) => {
 				console.error(error);
@@ -89,24 +86,23 @@ class TodoContextProvider extends Component {
 		axios
 			.delete('api/estudiante/delete/' + data.id)
 			.then((response) => {
-				if(response.data.message.level === 'success'){
+				if (response.data.message.level === 'success') {
 					let todos = [ ...this.state.todos ];
 					let todo = todos.find((todo) => {
 						return todo.id === data.id;
 					});
-	
+
 					todos.splice(todos.indexOf(todo), 1);
-	
+
 					this.setState({
 						todos: todos,
-						message: response.data.message,
+						message: response.data.message
 					});
-				} else { 
+				} else {
 					this.setState({
-						message: response.data.message,
-					})
+						message: response.data.message
+					});
 				}
-
 			})
 			.catch((error) => {
 				console.error(error);
@@ -121,7 +117,7 @@ class TodoContextProvider extends Component {
 					createTodo: this.createTodo.bind(this),
 					updateTodo: this.updateTodo.bind(this),
 					deleteTodo: this.deleteTodo.bind(this),
-					setMessage: (message)=>this.setState({message:message}),
+					setMessage: (message) => this.setState({ message: message })
 				}}
 			>
 				{this.props.children}

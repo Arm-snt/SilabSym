@@ -82,7 +82,7 @@ function NuevoUsuario(){
           <Grid container spacing={2}>
             <Grid item md={4} xs={6}>
               <TextField
-                type="text"
+                type="number"
                 value={addCodusuario}
                 onChange={(event) => {
                   setAddCodusuario(event.target.value);

@@ -50,11 +50,18 @@ class TodoContextProvider extends Component {
 		axios
 			.post('api/trabajo/create', todo)
 			.then((response) => {
-				let data = [ ...this.state.todos ];
-				data.push(response.data.todo);
-				this.setState({
-					todos: data
-				});
+				if (response.data.message.level === 'success') {
+					let data = [ ...this.state.todos ];
+					data.push(response.data.todo);
+					this.setState({
+						todos: data,
+						message: response.data.message
+					});
+				} else {
+					this.setState({
+						message: response.data.message
+					});
+				}
 			})
 			.catch((error) => {
 				console.error(error);

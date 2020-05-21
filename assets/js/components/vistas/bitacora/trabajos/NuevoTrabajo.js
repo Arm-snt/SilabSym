@@ -72,14 +72,14 @@ function NuevoTrabajo() {
 				<form style={style.form}>
 					<Grid container spacing={2}>
 						<Grid item md={4} xs={6}>
-							<TextField
-								type="text"
-								value={addTodo}
-								onChange={(event) => {
-									setAddTodo(event.target.value);
+							<Autocomplete
+								id="combo-box-demo"
+								options={context.est}
+								onChange={(e, a) => {
+									setAddTodo(a !== null ? a.id : '');
 								}}
-								label="Estudiante"
-								fullWidth={true}
+								getOptionLabel={(option) => option.codigo + ' - ' + option.nombre}
+								renderInput={(params) => <TextField {...params} label="Estudiante" />}
 							/>
 						</Grid>
 						<Grid item md={4} xs={6}>

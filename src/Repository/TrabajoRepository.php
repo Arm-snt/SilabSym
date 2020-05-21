@@ -41,7 +41,6 @@ class TrabajoRepository extends ServiceEntityRepository
             $reg= $dato2;
             $cri= $dato3;
             if($stm->execute(array(':tra'=>$tra, ':reg'=>$reg, ':cri'=>$cri)));
-            echo "Se ha creado el nuevo registro!";
         } catch (Exception $e) {
             return $e;
         }
