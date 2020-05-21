@@ -21,8 +21,8 @@ function EstSnackBar() {
     const context = useContext(TodoContext);
 
     return (
-        <Snackbar open={context.message.text !== undefined} autoHideDuration={6000}>            
-            {context.message.text && (
+        <Snackbar autoHideDuration={2000} open={context.message.text !== undefined}>            
+            {context.message.text&&(
                 <SnackbarContent style={{backgroundColor:checkLevel(context.message.level)}} message={context.message.text.map((text, index)=>(
                     <Fragment key={index+ ' ' +text}>                        
                         <span>{text}</span>

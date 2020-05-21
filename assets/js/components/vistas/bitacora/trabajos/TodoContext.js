@@ -1,109 +1,139 @@
-import React, { Component } from "react";
-import { createContext } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import { createContext } from 'react';
+import axios from 'axios';
 
 export const TodoContext = createContext();
 
 class TodoContextProvider extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todos: [],
-    };
-    this.readTodo();
-  }
+	constructor(props) {
+		super(props);
+		this.state = {
+			todos: [],
+			est: [],
+			message: {}
+		};
+		this.readTodo();
+		this.leer();
+	}
 
-  //read
-  readTodo() {
-    axios
-      .get("api/trabajo/read")
-      .then((response) => {
-        this.setState({
-          todos: response.data,
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+	//read
+	readTodo() {
+		axios
+			.get('api/trabajo/read')
+			.then((response) => {
+				this.setState({
+					todos: response.data
+				});
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
 
-  //create
-  createTodo(event, todo) {
-    event.preventDefault();
-    axios
-      .post("api/trabajo/create", todo)
-      .then((response) => {
-        console.log(response.data);
-        let data = [...this.state.todos];
-        data.push(response.data.todo);
-        this.setState({
-          todos: data,
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+	//read
+	leer() {
+		axios
+			.get('api/estudiante/read')
+			.then((response) => {
+				this.setState({
+					est: response.data
+				});
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
 
-  //update
-  updateTodo(data) {
-    axios
-      .put("api/trabajo/update/" + data.id, data)
-      .then((response) => {
-        let todos = [...this.state.todos];
-        let todo = todos.find((todo) => {
-          return todo.id === data.id;
-        });
+	//create
+	createTodo(event, todo) {
+		event.preventDefault();
+		axios
+			.post('api/trabajo/create', todo)
+			.then((response) => {
+				let data = [ ...this.state.todos ];
+				data.push(response.data.todo);
+				this.setState({
+					todos: data
+				});
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
 
-        todo.nombre = response.data.todo.nombre;
-        todo.registro = response.data.todo.registro;
-        todo.descripcion = response.data.todo.descripcion;
+	//update
+	updateTodo(data) {
+		axios
+			.put('api/trabajo/update/' + data.id, data)
+			.then((response) => {
+				if (response.data.message.level === 'success') {
+					let todos = [ ...this.state.todos ];
+					let todo = todos.find((todo) => {
+						return todo.id === data.id;
+					});
 
-        this.setState({
-          todos: todos,
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+					todo.nombre = response.data.todo.nombre;
+					todo.registro = response.data.todo.registro;
+					todo.descripcion = response.data.todo.descripcion;
 
-  //delete
-  deleteTodo(data) {
-    axios
-      .delete("api/trabajo/delete/" + data.id)
-      .then((response) => {
-        //message
-        let todos = [...this.state.todos];
-        let todo = todos.find((todo) => {
-          return todo.id === data.id;
-        });
+					this.setState({
+						todos: todos,
+						message: response.data.message
+					});
+				} else {
+					this.setState({
+						message: response.data.message
+					});
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
 
-        todos.splice(todos.indexOf(todo), 1);
+	//delete
+	deleteTodo(data) {
+		axios
+			.delete('api/trabajo/delete/' + data.id)
+			.then((response) => {
+				if (response.data.message.level === 'success') {
+					let todos = [ ...this.state.todos ];
+					let todo = todos.find((todo) => {
+						return todo.id === data.id;
+					});
 
-        this.setState({
-          todos: todos,
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+					todos.splice(todos.indexOf(todo), 1);
 
-  render() {
-    return (
-      <TodoContext.Provider
-        value={{
-          ...this.state,
-          createTodo: this.createTodo.bind(this),
-          updateTodo: this.updateTodo.bind(this),
-          deleteTodo: this.deleteTodo.bind(this),
-        }}
-      >
-        {this.props.children}
-      </TodoContext.Provider>
-    );
-  }
+					this.setState({
+						todos: todos,
+						message: response.data.message
+					});
+				} else {
+					this.setState({
+						message: response.data.message
+					});
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
+
+	render() {
+		return (
+			<TodoContext.Provider
+				value={{
+					...this.state,
+					createTodo: this.createTodo.bind(this),
+					updateTodo: this.updateTodo.bind(this),
+					deleteTodo: this.deleteTodo.bind(this),
+					setMessage: (message) => this.setState({ message: message })
+				}}
+			>
+				{this.props.children}
+			</TodoContext.Provider>
+		);
+	}
 }
 
 export default TodoContextProvider;

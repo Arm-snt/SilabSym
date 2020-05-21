@@ -55,7 +55,14 @@ const style = {
   search: {
     width: 400,
     marginBottom: 20
-  }
+  },
+  tableHead: {
+    color: "#ffffff",
+    backgroundColor: "#E2001A",
+  },
+  tableCell: {
+    color: "#ffffff",
+  },
 };
 
 function createData(id, stock, horas_uso, categoria, estado) {
@@ -104,57 +111,15 @@ export default class Laboratorios extends Component {
         style={style.container}
         component="main"
         maxWidth="lg"
-        justify="center"
-      >
-        <Paper style={style.paper}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link color="inherit" style={style.link} href="">
-                  <HomeIcon style={style.homeIcon} />
-                  Laboratorios
-                </Link>
-                <Link
-                  color="inherit"
-                  style={style.link}
-                  href="/laboratorio/nuevo"
-                >
-                  <Typography color="textPrimary">Nuevo Laboratorio</Typography>
-                </Link>
-              </Breadcrumbs>
-            </Grid>
-            <Grid item md={12} xs={12}>
-              <Divider style={style.divider} />
-            </Grid>
-          </Grid>
-
-          <div className="App">
-            <form>
-              <TextField
-                fullWidth
-                placeholder="Buscar..."
-                onChange={this.searchHandler}
-                value={term}
-                style={style.search}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <Icon path={mdiCardSearch} size={1.5} color="red" />
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </form>
-          </div>
-
+        justify="center">
           <TableContainer component={Paper} style={style.space}>
             <Table style={style.table} aria-label="customized table">
-              <TableHead>
+              <TableHead style={style.tableHead}>
                 <TableRow>
-                  <TableCell align="center">Laboratorio</TableCell>
-                  <TableCell align="center">Ubicación</TableCell>
-                  <TableCell align="center">Observaciones</TableCell>
-                  <TableCell align="center">Opciones</TableCell>
+                  <TableCell style={style.tableCell} align="center">Laboratorio</TableCell>
+                  <TableCell style={style.tableCell} align="center">Ubicación</TableCell>
+                  <TableCell style={style.tableCell} align="center">Observaciones</TableCell>
+                  <TableCell style={style.tableCell} align="center">Opciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -184,7 +149,6 @@ export default class Laboratorios extends Component {
               </TableBody>
             </Table>
           </TableContainer>
-        </Paper>
       </Container>
     );
   }

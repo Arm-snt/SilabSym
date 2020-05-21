@@ -68,6 +68,7 @@ class EstudianteController extends AbstractController
             $arrayOfTodos[] = $todo->toArray();
         }
         return $this->json($arrayOfTodos);
+        
     }
 
     /**

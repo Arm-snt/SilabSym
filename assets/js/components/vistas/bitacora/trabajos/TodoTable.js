@@ -1,35 +1,9 @@
 import React, { useContext, useState, Fragment } from "react";
-import {
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableContainer,
-} from "@material-ui/core";
-import {
-  Container,
-  Paper,
-  Grid,
-  Breadcrumbs,
-  Link,
-  Typography,
-  TextField,
-  IconButton,
-  Divider,
-  Button,
-} from "@material-ui/core";
+import { Table, TableHead, TableRow, TableCell, TableBody, TableContainer,TablePagination} from "@material-ui/core";
+import { Container, Paper, Grid, Breadcrumbs, Link, Typography, TextField, IconButton, Divider, Button,} from "@material-ui/core";
 import Icon from "@mdi/react";
-import {
-  mdiEye,
-  mdiCircleEditOutline,
-  mdiCheckboxMarkedCircle,
-  mdiCardSearch,
-} from "@mdi/js";
-
-import { Autocomplete } from "@material-ui/lab";
+import { mdiCircleEditOutline } from "@mdi/js";
 import { CancelRounded } from "@material-ui/icons";
-import HomeIcon from "@material-ui/icons/Home";
 import DoneIcon from "@material-ui/icons/Done";
 import CloseIcon from "@material-ui/icons/Close";
 import { TodoContext } from "./TodoContext";
@@ -91,29 +65,14 @@ const style = {
 
 function TodoTable() {
   const context = useContext(TodoContext);
-  const [addTodoRegistro, setAddTodoRegistro] = useState("");
-  const [addTodoDescripcion, setAddTodoDescripcion] = useState("");
-  const [addTodo, setAddTodo] = useState("");
   const [editIsShown, setEditIsShown] = useState(false);
   const [editTodoRegistro, setEditTodoRegistro] = useState("");
   const [editTodoDescripcion, setEditTodoDescripcion] = useState("");
   const [editTodo, setEditTodo] = useState("");
-  const [deleteConfirmationIsShown, setDeleteConfirmationIsShown] = useState(
-    false
-  );
+  const [deleteConfirmationIsShown, setDeleteConfirmationIsShown] = useState(false);
   const [todoToBeDeleted, setTodoToBeDeleted] = useState(null);
-
-  const onCreateSubmit = (event) => {
-    event.preventDefault();
-    context.createTodo(event, {
-      nombre: addTodo,
-      registro: addTodoRegistro,
-      descripcion: addTodoDescripcion,
-    });
-    setAddTodo("");
-    setAddTodoRegistro("");
-    setAddTodoDescripcion("");
-  };
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const onEditSubmit = (todoId, event) => {
     event.preventDefault();
@@ -126,130 +85,46 @@ function TodoTable() {
     setEditIsShown(false);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   function historyBack() {
     window.history.back();
   }
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, context.todos.length - page * rowsPerPage);
 
   return (
     <Fragment>
       <Container
-        style={style.container}
-        component="main"
-        maxWidth="lg"
-        justify="center"
-      >
-        <Paper style={style.paper}>
-          <Grid container spacing={3}>
-            <Grid item xs={12} md={12}>
-              <Breadcrumbs aria-label="breadcrumb">
-                <Link color="inherit" style={style.link} href="">
-                  <HomeIcon style={style.homeIcon} />
-                  Trabajos
-                </Link>
-                <Link color="inherit" style={style.link} href="/trabajo/nuevo">
-                  <Typography color="textPrimary">Nuevo Trabajo</Typography>
-                </Link>
-              </Breadcrumbs>
-            </Grid>
-            <Grid item md={12} xs={12}>
-              <Divider style={style.divider} />
-            </Grid>
-          </Grid>
-
-          <form style={style.form}>
-            <Grid container spacing={2}>
-              <Grid item md={6} xs={6}>
-                <Autocomplete
-                  id="combo-box-demo"
-                  onChange={(e, a) => {
-                    setAddTodo(a !== null ? a.state : "");
-                  }}
-                  getOptionLabel={(option) => option.state}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Estudiante" />
-                  )}
-                />
-              </Grid>
-              <Grid item md={4} xs={6}>
-                <TextField
-                  type="text"
-                  value={addTodoRegistro}
-                  onChange={(event) => {
-                    setAddTodoRegistro(event.target.value);
-                  }}
-                  label="Registrado por"
-                  fullWidth={true}
-                />
-              </Grid>
-              <Grid item md={4} xs={6}>
-                <TextField
-                  type="text"
-                  value={addTodoDescripcion}
-                  onChange={(event) => {
-                    setAddTodoDescripcion(event.target.value);
-                  }}
-                  label="Descripción"
-                  fullWidth={true}
-                />
-              </Grid>
-              <Grid item xs={6} md={2}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  size="medium"
-                  color="primary"
-                  style={style.submit}
-                  onClick={onCreateSubmit}
-                >
-                  Guardar
-                </Button>
-              </Grid>
-              <Grid item xs={2} md={2}>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  size="medium"
-                  color="secondary"
-                  style={style.submit}
-                  onClick={historyBack}
-                >
-                  Cancelar
-                </Button>
-              </Grid>
-            </Grid>
-          </form>
+      style={style.container}
+      component="main"
+      maxWidth="lg"
+      justify="center">
           <TableContainer component={Paper}>
             <Table style={style.table} aria-label="customized table">
               {/*HEAD*/}
               <TableHead style={style.tableHead}>
                 <TableRow>
-                  <TableCell style={style.tableCell} align="center">
-                    Estudiante
-                  </TableCell>
-                  <TableCell style={style.tableCell} align="center">
-                    Registro
-                  </TableCell>
-                  <TableCell style={style.tableCell} align="center">
-                    Descripción
-                  </TableCell>
-                  <TableCell style={style.tableCell} align="center">
-                    Opciones
-                  </TableCell>
+                  <TableCell style={style.tableCell} align="center">Estudiante</TableCell>
+                  <TableCell style={style.tableCell} align="center">Registro</TableCell>
+                  <TableCell style={style.tableCell} align="center">Descripción</TableCell>
+                  <TableCell style={style.tableCell} align="center">Opciones</TableCell>
                 </TableRow>
               </TableHead>
-
               {/*BODY*/}
               <TableBody>
-                {/*ADD*/}
-
-                {/*DATA*/}
                 {context.todos
-                  .slice()
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .reverse()
                   .map((todo, index) => (
                     <TableRow key={"todo " + index}>
                       {/*NAME*/}
-
                       <TableCell align="center">
                         {editIsShown === todo.id ? (
                           <form onSubmit={onEditSubmit.bind(this, todo.id)}>
@@ -267,7 +142,6 @@ function TodoTable() {
                           <Typography>{todo.nombre}</Typography>
                         )}
                       </TableCell>
-
                       <TableCell align="center">
                         {editIsShown === todo.id ? (
                           <form onSubmit={onEditSubmit.bind(this, todo.id)}>
@@ -285,7 +159,6 @@ function TodoTable() {
                           <Typography>{todo.registro}</Typography>
                         )}
                       </TableCell>
-
                       {/*DESCRIPTION*/}
                       <TableCell align="center">
                         {editIsShown === todo.id ? (
@@ -305,13 +178,11 @@ function TodoTable() {
                           </Typography>
                         )}
                       </TableCell>
-
                       <TableCell align="right">
                         {editIsShown === todo.id ? (
                           <Fragment>
                             <IconButton
-                              onClick={onEditSubmit.bind(this, todo.id)}
-                            >
+                              onClick={onEditSubmit.bind(this, todo.id)}>
                               <DoneIcon />
                             </IconButton>
                             <IconButton onClick={() => setEditIsShown(false)}>
@@ -352,9 +223,15 @@ function TodoTable() {
               </TableBody>
             </Table>
           </TableContainer>
-        </Paper>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={context.todos.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}/>
       </Container>
-
       {deleteConfirmationIsShown && (
         <DeleteDialog
           todo={todoToBeDeleted}

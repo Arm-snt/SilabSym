@@ -33,6 +33,31 @@ class TrabajoRepository extends ServiceEntityRepository
         }
     }
 
+    public function Insertar($dato1, $dato2, $dato3){
+        try {
+            $conn = $this->getEntityManager()->getConnection();
+            $stm = $conn->prepare(" INSERT INTO trabajo (estudiante_id, registro, descripcion) VALUES (:tra, :reg, :cri)");
+            $tra=$dato1;
+            $reg= $dato2;
+            $cri= $dato3;
+            if($stm->execute(array(':tra'=>$tra, ':reg'=>$reg, ':cri'=>$cri)));
+            echo "Se ha creado el nuevo registro!";
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+
+    public function Actualizar(){
+        try {
+            $conn = $this->getEntityManager()->getConnection();
+            $stm = $conn->prepare(" UPDATE trabajo SET estudiante_id = 21 WHERE trabajo.id = 7");
+            $stm->execute([]);
+            $stm->close();
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+
 
     // /**
     //  * @return Trabajo[] Returns an array of Trabajo objects

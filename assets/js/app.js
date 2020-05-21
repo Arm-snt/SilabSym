@@ -29,8 +29,11 @@ import NuevoTrabajo from "./components/vistas/bitacora/trabajos/NuevoTrabajo";
 import Trabajo from "./components/vistas/bitacora/trabajos/Trabajo";
 import TabPanel from "./components/vistas/bitacora/prestamos/TabPanel";
 import TabEstudiante from "./components/seguridad/personas/estudiantes/TabEstudiante"
+import TabUsuario from "./components/seguridad/usuarios/TabUsuario"
 import Contexts from "./components/contexts/Contexts";
 import TabElemento from "./components/vistas/almacen/elementos/TabElemento";
+import TabLaboratorio from "./components/vistas/almacen/laboratorios/TabLaboratorio"
+import TabTrabajo from "./components/vistas/bitacora/trabajos/TabTrabajo"
 
 function App(props) {
   return (
@@ -40,26 +43,20 @@ function App(props) {
         <Grid container>
           <Switch>
             <Route path="/mensajes" exact component={Contexts}></Route>
-            {/*<Route path="/elementos" exact component={Elementos}></Route>
-            <Route path="/elemento/nuevo" exact component={NuevoElemento} ></Route>
-            <Route path="/elemento/editar" exact component={EditarElemento} ></Route>*/}
             <Route path="/elementos" exact component={TabElemento}></Route>
             <Route path="/Prestamos" exact component={TabPanel}></Route> 
             <Route path="/auth/login" exact component={Login}></Route>
             <Route path="/auth/perfil" exact component={PerfilUsuario}></Route>
-            <Route path="/usuarios" exact component={Usuarios}></Route>
-            <Route path="/usuario/nuevo" exact component={Usuario}></Route>
-            <Route path="/usuario/detalles" exact component={DetallesUsuario} ></Route>
-            <Route path="/usuario/editar" exact component={UsuarioEditar} ></Route>
+            <Route path="/usuarios" exact component={TabUsuario}></Route>
             <Route path="/Estudiantes" exact component={TabEstudiante}></Route>
             <Route path="/estudiante/update" exact component={UpdateEstudiante} ></Route>
-            <Route path="/laboratorios" exact component={Laboratorios}></Route>
+            <Route path="/laboratorios" exact component={TabLaboratorio}></Route>
             <Route path="/laboratorio/nuevo" exact component={Laboratorio} ></Route>
             <Route path="/laboratorio/detalles" exact component={DetallesLaboratorio} ></Route>
             <Route path="/laboratorio/editar" exact component={LaboratorioEditar} ></Route>
             <Route path="/mantenimientos" exact component={Mantenimientos} ></Route>
             <Route path="/mantenimiento/nuevo" exact component={NuevoMantenimiento}></Route>
-            <Route path="/trabajos" exact component={Trabajo}></Route>
+            <Route path="/trabajos" exact component={TabTrabajo}></Route>
             <Route path="/trabajo/nuevo" exact component={NuevoTrabajo}></Route>
             <Route path="/TabEstudiante" exact component={TabEstudiante}></Route>
           </Switch>

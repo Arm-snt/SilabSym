@@ -149,38 +149,6 @@ const NuevoLaboratorio = ({ agregarLaboratorio }) => {
   return (
     <Fragment>
       <Paper style={style.paper}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
-            <Breadcrumbs aria-label="breadcrumb">
-              <Link color="inherit" style={style.link} href="/laboratorios">
-                <HomeIcon style={style.homeIcon} />
-                Laboratorios
-              </Link>
-              <Typography color="textPrimary">Nuevo Laboratorio</Typography>
-            </Breadcrumbs>
-          </Grid>
-        </Grid>
-
-        <Collapse in={error} style={style.error}>
-          <Alert
-            variant="filled"
-            severity="error"
-            action={
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                onClick={() => {
-                  actualizarError(false);
-                }}
-              >
-                <CloseIcon fontSize="inherit" />
-              </IconButton>
-            }
-          >
-            ¡Tiene que llenar todos los campos!
-          </Alert>
-        </Collapse>
-
         <form style={style.form} onSubmit={submitLaboratorio}>
           <Grid container spacing={2}>
             <Grid item md={6} xs={6}>

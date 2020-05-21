@@ -29,7 +29,6 @@ class TrabajoController extends AbstractController
      */
     public function read()
     {
-
         $todos = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
         $todos = $this->trabajoRepository->Mostrar();
         return $this->json($todos);
@@ -42,25 +41,26 @@ class TrabajoController extends AbstractController
      */
     public function create(Request $request)
     {
-        $content = json_decode($request->getContent());
-
-        $todo = new Trabajo();
- 
-        $todo->setNombre($content->nombre);
-        $todo->setRegistro($content->registro);
-        $todo->setDescripcion($content->descripcion);
-
+        $content = json_decode($request->getContent(), true);
+        dd($content);
+        
+        $dato1=$content->estudiante_id;
+        $dato2=$content->registro;
+        $dato3=$content->descripcion;
         try {
+            
+            $todo = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
+            $todo = $this->trabajoRepository->Insertar($dato1,$dato2,$dato3);
             $this->entityManager->persist($todo);
             $this->entityManager->flush();
-            return $this->json([
-                'todo' => $todo->toArray(),
-                ]);
                 
         } catch (Exception $exception) {
-            //error                
- 
-        }
+            return $this->json([ 
+                'message' => ['text'=>['El trabajo no se ha podido registrar!'.$exception] , 'level'=>'error']
+                ]);
+        }  
+        return $this->json($todo);
+                      
     }
 
     /**

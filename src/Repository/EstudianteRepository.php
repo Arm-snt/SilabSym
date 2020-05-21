@@ -19,19 +19,7 @@ class EstudianteRepository extends ServiceEntityRepository
         parent::__construct($registry, Estudiante::class);
     }
 
-    public function BuscarElementoPorId($id){
-        return $this->getEntityManager()
-            ->createQuery(
-                '
-                    SELECT estudiante.id, estudiante.codigo, estudiante.nombre 
-                    FROM App\Entity\Estudiante estudiante
-                    WHERE estudiante.id=:identificacion
-                '
-            )
-            ->setParameter('identificacion',$id)
-            ->getSingleResult()
-            ;
-    }
+    
 
     // /**
     //  * @return Estudiante[] Returns an array of Estudiante objects
