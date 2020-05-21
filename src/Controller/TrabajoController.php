@@ -43,21 +43,21 @@ class TrabajoController extends AbstractController
     {
         $content = json_decode($request->getContent(), true);
                
-        $dato1=$content['estudiante_id'];
-        $dato2=$content['registro'];
-        $dato3=$content['descripcion'];
+        $estudiante_id=$content['estudiante_id'];
+        $registro=$content['registro'];
+        $descripcion=$content['descripcion'];
         try {
             
             $todo = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
-            $todo = $this->trabajoRepository->Insertar($dato1,$dato2,$dato3);
+            $todo = $this->trabajoRepository->Insertar($estudiante_id,$registro,$descripcion);
                 
         } catch (Exception $exception) {
             return $this->json([ 
                 'message' => ['text'=>['El trabajo no se ha podido registrar!'.$exception] , 'level'=>'error']
                 ]);
         }  
-            return $this->json([ 'todo' => [$todo],
-                'message' => ['text'=>['El trabajo de '.$dato1, 'se ha registrado!' ] , 'level'=>'success']      
+            return $this->json([
+                'message' => ['text'=>['El trabajo de '.$estudiante_id, 'se ha registrado!' ] , 'level'=>'success']      
                  ]);
     }
 
@@ -70,53 +70,69 @@ class TrabajoController extends AbstractController
     public function update(Request $request, Trabajo $todo)
     {
         $content = json_decode($request->getContent());
- 
-        if ($todo->setNombre() === $content->nombre && $todo->getRegistro() === $content->registro && $todo->getDescripcion() === $content->descripcion) {
+        
+        $id=$content->id;
+        $estudiante_id=$content->estudiante_id;
+        $registro=$content->registro;
+        $descripcion=$content->descripcion;
+        
+        $todo = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
+        $todo = $this->trabajoRepository->Buscar($id,$estudiante_id,$registro,$descripcion);
+        
+
+        $estudiante_id_bd=$todo['estudiante_id'];
+        $registro_bd=$todo['registro'];
+        $descripcion_bd=$todo['descripcion'];
+        $nombre_bd=$todo['nombre'];
+
+        if ($estudiante_id===$estudiante_id_bd && $registro===$registro_bd && $descripcion===$descripcion_bd) {
             return $this->json([
-                'message' => 'No hubo cambios'
+                'message' => ['text'=>['No se realizaron cambios al estudiante: '.$nombre_bd] , 'level'=>'warning']
             ]);
         }
 
-        $todo->setNombre($content->nombre);
-        $todo->setRegistro($content->registro);
-        $todo->setDescripcion($content->descripcion);
- 
         try {
-            $this->entityManager->flush();
+
+            $todo = $this->trabajoRepository->Actualizar($id,$estudiante_id,$registro,$descripcion);
         } catch (Exception $exception) {
-            //error
+            return $this->json([ 
+                'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se actualizaba el trabajo!'] , 'level'=>'error']
+                ]);
         }
  
         return $this->json([
-            'todo'    => $todo->toArray(),
-            'message' => 'todo ha sido actualizado'
+            'message' => ['text'=>['El trabajo se ha actualizado!' ] , 'level'=>'success']      
         ]);
  
     }
 
     /**
-     * @Route("/delete/{id}", name="api_trabajo_delete")
+     * @Route("/delete/{id}", name="api_trabajo_delete", methods={"DELETE"})
      * @param Trabajo $todo
+     * @param Request $request
      * @return JsonResponse
      */
-    public function delete(Trabajo $todo)
+    public function delete(Request $request, Trabajo $todo)
     {
+        
+        $content = json_decode($request->getContent(),true);
+        $id=$content['id'];
+
+        dd($content);
+        
+
         try {
-            $this->entityManager->remove($todo);
-            $this->entityManager->flush();
+            $todo = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
+            $todo = $this->trabajoRepository->Eliminar($id);    
         } catch (Exception $exception) {
-            //error
+            return $this->json([ 
+                'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se eliminaba al estudiante!'.$exception] , 'level'=>'error']
+                ]);
         }
- 
         return $this->json([
-            'message' => 'todo ha sido eliminado'
+            'message' => ['text'=>['Se ha eliminado la informacion del Trabajo'] , 'level'=>'success']
         ]);
  
     }
-
-
-
-
-    
   
 }
