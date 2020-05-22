@@ -62,6 +62,16 @@ class Usuario
      */
     private $estado;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Laboratorio", mappedBy="usuario")
+     */
+    private $laboratorios;
+
+    public function __construct()
+    {
+        $this->laboratorios = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -178,4 +188,36 @@ class Usuario
     public function toArray(){
         return ['id'=>$this->id,'codusuario'=>$this->codusuario,'usuario'=>$this->usuario,'nombre'=>$this->nombre,'apellido'=>$this->apellido,'correo'=>$this->correo,'password'=>$this->password,'telefono'=>$this->telefono,'tipousuario'=>$this->tipousuario,'estado'=>$this->estado];
     }
+
+    /**
+     * @return Collection|Laboratorio[]
+     */
+    public function getLaboratorios(): Collection
+    {
+        return $this->laboratorios;
+    }
+
+    public function addLaboratorio(Laboratorio $laboratorio): self
+    {
+        if (!$this->laboratorios->contains($laboratorio)) {
+            $this->laboratorios[] = $laboratorio;
+            $laboratorio->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLaboratorio(Laboratorio $laboratorio): self
+    {
+        if ($this->laboratorios->contains($laboratorio)) {
+            $this->laboratorios->removeElement($laboratorio);
+            // set the owning side to null (unless already changed)
+            if ($laboratorio->getUsuario() === $this) {
+                $laboratorio->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

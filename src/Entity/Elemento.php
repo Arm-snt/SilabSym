@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,7 +22,7 @@ class Elemento
     private $codelemento;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=255)
      */
     private $elemento;
 
@@ -33,19 +32,25 @@ class Elemento
     private $stock;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer")
      */
     private $horauso;
 
     /**
-     * @ORM\Column(type="string", length=2)
+     * @ORM\Column(type="string", length=255)
      */
     private $categoria;
 
     /**
-     * @ORM\Column(type="string", length=12)
+     * @ORM\Column(type="string", length=255)
      */
     private $estado;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Laboratorio", inversedBy="elementos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $laboratorio;
 
     public function getId(): ?int
     {
@@ -93,7 +98,7 @@ class Elemento
         return $this->horauso;
     }
 
-    public function setHorauso(?int $horauso): self
+    public function setHorauso(int $horauso): self
     {
         $this->horauso = $horauso;
 
@@ -124,8 +129,19 @@ class Elemento
         return $this;
     }
 
-    public function toArray()
+    public function getLaboratorio(): ?Laboratorio
     {
-        return ['id'=> $this->id,'codelemento'=>$this->codelemento,'elemento'=>$this->elemento,'stock'=>$this->stock,'horauso'=>$this->horauso,'categoria'=>$this->categoria,'estado'=>$this->estado];
+        return $this->laboratorio;
+    }
+
+    public function setLaboratorio(?Laboratorio $laboratorio): self
+    {
+        $this->laboratorio = $laboratorio;
+
+        return $this;
+    }
+
+    public function toArray(){
+        return ['id'=>$this->id,'codelemento'=>$this->codelemento,'elemento'=>$this->elemento,'stock'=>$this->stock,'horauso'=>$this->horauso,'categoria'=>$this->categoria,'estado'=>$this->estado];
     }
 }

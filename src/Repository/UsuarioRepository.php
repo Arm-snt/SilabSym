@@ -19,30 +19,16 @@ class UsuarioRepository extends ServiceEntityRepository
         parent::__construct($registry, Usuario::class);
     }
 
-    public function BuscarElementoPorId($id){
-        return $this->getEntityManager()
-            ->createQuery(
-                '
-                    SELECT usuario.id, usuario.codusuario, usuario.usuario, usuario.nombre, usuario.apellido, usuario.correo, usuario.password, usuario.telefono, usuario.tipousuario,
-                    FROM App\Entity\Usuario usuario
-                    WHERE usuario.id=:identificacion
-                '
-            )
-            ->setParameter('identificacion',$id)
-            ->getSingleResult()
-            ;
-    }
-
     // /**
     //  * @return Usuario[] Returns an array of Usuario objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
+            ->orderBy('t.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -53,8 +39,8 @@ class UsuarioRepository extends ServiceEntityRepository
     /*
     public function findOneBySomeField($value): ?Usuario
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

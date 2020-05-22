@@ -114,19 +114,38 @@ class TrabajoController extends AbstractController
      */
     public function delete(Request $request, Trabajo $todo)
     {
-        
-        $content = json_decode($request->getContent(),true);
-        $id=$content['id'];
+        try {
+            $this->entityManager->remove($todo);
+            $this->entityManager->flush();
+        } catch (Exception $exception) {
+            return $this->json([ 
+                'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se eliminaba el trabajo!'] , 'level'=>'error']
+                ]);
+        }
+ 
+        return $this->json([
+            'message' => ['text'=>['Se ha eliminado la informacion del trabajo'] , 'level'=>'success']
+        ]);
+ 
+    }
+ 
+    
+    
+    public function delete2(Request $request, Trabajo $todo)
+    {
+         function toArray(){
+            return ['id' => $this->id,'registro' => $this->registro, 'descripcion' => $this->descripcion];
+        }
 
-        dd($content);
+        $id[] = $todo->toArray();
+        dd($id);
         
-
         try {
             $todo = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
             $todo = $this->trabajoRepository->Eliminar($id);    
         } catch (Exception $exception) {
             return $this->json([ 
-                'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se eliminaba al estudiante!'.$exception] , 'level'=>'error']
+                'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se eliminaba el trabajo!'.$exception] , 'level'=>'error']
                 ]);
         }
         return $this->json([

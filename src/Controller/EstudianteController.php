@@ -113,8 +113,7 @@ class EstudianteController extends AbstractController
      * @return JsonResponse
      */
     public function delete(Request $request,Estudiante $todo)
-    {
-        $content = json_decode($request->getContent());
+    {       
 
         try {
             $this->entityManager->remove($todo);
