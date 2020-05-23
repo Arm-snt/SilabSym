@@ -90,8 +90,8 @@ export default function SimpleTabs(onchangeTab){
                     onChange={handleChange}
                     indicatorColor="primary"
                     textColor="primary">
-                        <Tab label="Elementos" {...a11yProps(0)} />
-                        <Tab label="Nuevo Elemento" {...a11yProps(1)} />
+                        <Tab label="Nuevo Elemento" {...a11yProps(0)} />
+                        <Tab label="Elementos" {...a11yProps(1)} />
                         <Tab label="Detalles Elemento" {...a11yProps(2)} disabled />
                     </Tabs>
                     <SwipeableViews
@@ -99,16 +99,16 @@ export default function SimpleTabs(onchangeTab){
                     index={value}
                     onChangeIndex={onChangeIndex}>
                         <TabElemento value={value} index={0}>
-                          <TodoContextProvider>
-                            <Elementos/>
-                            <EstSnackBar/>
-                          </TodoContextProvider>                            
-                        </TabElemento>
-                        <TabElemento value={value} index={1}>
-                          <TodoContextProvider>
+                        <TodoContextProvider>
                             <NuevoElemento/>
                             <EstSnackBar/>
-                          </TodoContextProvider>                                
+                          </TodoContextProvider>                                                      
+                        </TabElemento>
+                        <TabElemento value={value} index={1}>
+                        <TodoContextProvider>
+                            <Elementos/>
+                            <EstSnackBar/>
+                          </TodoContextProvider>
                         </TabElemento>
                         <TabElemento value={value} index={2}>
                             <EditarElemento/>

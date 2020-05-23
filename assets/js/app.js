@@ -1,69 +1,61 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "../css/app.css";
-import AppNavBar from "./components/layout/AppNavbar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { MuiThemeProvider } from "@material-ui/core/styles";
-import theme from "./theme/theme";
-import Grid from "@material-ui/core/Grid";
-import UpdateEstudiante from "./components/seguridad/personas/estudiantes/UpdateEstudiante";
-import PerfilUsuario from "./components/seguridad/usuarios/PerfilUsuario";
-import Usuarios from "./components/seguridad/usuarios/Usuarios";
-import Usuario from "./components/seguridad/usuarios/Usuario";
-import DetallesUsuario from "./components/seguridad/usuarios/DetallesUsuario";
-import UsuarioEditar from "./components/seguridad/usuarios/UsuarioEditar";
-import Laboratorios from "./components/vistas/almacen/laboratorios/Laboratorios";
-import Laboratorio from "./components/vistas/almacen/laboratorios/Laboratorio";
-import DetallesLaboratorio from "./components/vistas/almacen/laboratorios/DetallesLaboratorio";
-import LaboratorioEditar from "./components/vistas/almacen/laboratorios/LaboratorioEditar";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import '../css/app.css';
+import AppNavBar from './components/layout/AppNavbar';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+import theme from './theme/theme';
+import Grid from '@material-ui/core/Grid';
+import UpdateEstudiante from './components/seguridad/personas/estudiantes/UpdateEstudiante';
+import PerfilUsuario from './components/seguridad/usuarios/PerfilUsuario';
+import Usuarios from './components/seguridad/usuarios/Usuarios';
+import Usuario from './components/seguridad/usuarios/Usuario';
+import UsuarioEditar from './components/seguridad/usuarios/UsuarioEditar';
 //import RegistrarUsuario from "./components/seguridad/usuarios/RegistrarUsuario";
-import Login from "./components/seguridad/Login";
-import NuevoElemento from "./components/vistas/almacen/elementos/NuevoElemento";
-import EditarElemento from "./components/vistas/almacen/elementos/EditarElemento";
-import Elementos from "./components/vistas/almacen/elementos/Elementos";
-import Mantenimientos from "./components/vistas/bitacora/mantenimientos/Mantenimientos";
-import NuevoMantenimiento from "./components/vistas/bitacora/mantenimientos/NuevoMantenimiento";
+import Login from './components/seguridad/Login';
+import NuevoElemento from './components/vistas/almacen/elementos/NuevoElemento';
+import EditarElemento from './components/vistas/almacen/elementos/EditarElemento';
+import Elementos from './components/vistas/almacen/elementos/Elementos';
+import Mantenimientos from './components/vistas/bitacora/mantenimientos/Mantenimientos';
+import NuevoMantenimiento from './components/vistas/bitacora/mantenimientos/NuevoMantenimiento';
 //import EditarMantenimiento from "./components/vistas/bitacora/mantenimientos/EditarMantenimiento";
 //import Trabajos from "./components/vistas/bitacora/trabajos/Trabajos";
-import NuevoTrabajo from "./components/vistas/bitacora/trabajos/NuevoTrabajo";
-import Trabajo from "./components/vistas/bitacora/trabajos/Trabajo";
-import TabPanel from "./components/vistas/bitacora/prestamos/TabPanel";
-import TabEstudiante from "./components/seguridad/personas/estudiantes/TabEstudiante"
-import TabUsuario from "./components/seguridad/usuarios/TabUsuario"
-import Contexts from "./components/contexts/Contexts";
-import TabElemento from "./components/vistas/almacen/elementos/TabElemento";
-import TabLaboratorio from "./components/vistas/almacen/laboratorios/TabLaboratorio"
-import TabTrabajo from "./components/vistas/bitacora/trabajos/TabTrabajo"
+import NuevoTrabajo from './components/vistas/bitacora/trabajos/NuevoTrabajo';
+import Trabajo from './components/vistas/bitacora/trabajos/Trabajo';
+import TabPanel from './components/vistas/bitacora/prestamos/TabPanel';
+import TabEstudiante from './components/seguridad/personas/estudiantes/TabEstudiante';
+import TabUsuario from './components/seguridad/usuarios/TabUsuario';
+import Contexts from './components/contexts/Contexts';
+import TabElemento from './components/vistas/almacen/elementos/TabElemento';
+import TabLaboratorio from './components/vistas/almacen/laboratorios/TabLaboratorio';
+import TabTrabajo from './components/vistas/bitacora/trabajos/TabTrabajo';
 
 function App(props) {
-  return (
-    <Router>
-      <MuiThemeProvider theme={theme}>
-        <AppNavBar />
-        <Grid container>
-          <Switch>
-            <Route path="/mensajes" exact component={Contexts}></Route>
-            <Route path="/elementos" exact component={TabElemento}></Route>
-            <Route path="/Prestamos" exact component={TabPanel}></Route> 
-            <Route path="/auth/login" exact component={Login}></Route>
-            <Route path="/auth/perfil" exact component={PerfilUsuario}></Route>
-            <Route path="/usuarios" exact component={TabUsuario}></Route>
-            <Route path="/Estudiantes" exact component={TabEstudiante}></Route>
-            <Route path="/estudiante/update" exact component={UpdateEstudiante} ></Route>
-            <Route path="/laboratorios" exact component={TabLaboratorio}></Route>
-            <Route path="/laboratorio/nuevo" exact component={Laboratorio} ></Route>
-            <Route path="/laboratorio/detalles" exact component={DetallesLaboratorio} ></Route>
-            <Route path="/laboratorio/editar" exact component={LaboratorioEditar} ></Route>
-            <Route path="/mantenimientos" exact component={Mantenimientos} ></Route>
-            <Route path="/mantenimiento/nuevo" exact component={NuevoMantenimiento}></Route>
-            <Route path="/trabajos" exact component={TabTrabajo}></Route>
-            <Route path="/trabajo/nuevo" exact component={NuevoTrabajo}></Route>
-            <Route path="/TabEstudiante" exact component={TabEstudiante}></Route>
-          </Switch>
-        </Grid>
-      </MuiThemeProvider>
-    </Router>
-  );
+	return (
+		<Router>
+			<MuiThemeProvider theme={theme}>
+				<AppNavBar />
+				<Grid container>
+					<Switch>
+						<Route path="/mensajes" exact component={Contexts} />
+						<Route path="/elementos" exact component={TabElemento} />
+						<Route path="/Prestamos" exact component={TabPanel} />
+						<Route path="/auth/login" exact component={Login} />
+						<Route path="/auth/perfil" exact component={PerfilUsuario} />
+						<Route path="/usuarios" exact component={TabUsuario} />
+						<Route path="/Estudiantes" exact component={TabEstudiante} />
+						<Route path="/estudiante/update" exact component={UpdateEstudiante} />
+						<Route path="/laboratorios" exact component={TabLaboratorio} />
+						<Route path="/mantenimientos" exact component={Mantenimientos} />
+						<Route path="/mantenimiento/nuevo" exact component={NuevoMantenimiento} />
+						<Route path="/trabajos" exact component={TabTrabajo} />
+						<Route path="/trabajo/nuevo" exact component={NuevoTrabajo} />
+						<Route path="/TabEstudiante" exact component={TabEstudiante} />
+					</Switch>
+				</Grid>
+			</MuiThemeProvider>
+		</Router>
+	);
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'));

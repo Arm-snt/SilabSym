@@ -9,17 +9,19 @@ class TodoContextProvider extends Component {
 		super(props);
 		this.state = {
 			todos: [],
-			est: [],
+			ele: [],
+			usu: [],
 			message: {}
 		};
 		this.readTodo();
-		this.leer();
+		this.readElemento();
+		this.readUsuario();
 	}
 
 	//read
 	readTodo() {
 		axios
-			.get('api/trabajo/read')
+			.get('api/laboratorio/read')
 			.then((response) => {
 				this.setState({
 					todos: response.data
@@ -31,12 +33,26 @@ class TodoContextProvider extends Component {
 	}
 
 	//read
-	leer() {
+	readElemento() {
 		axios
-			.get('api/estudiante/read')
+			.get('api/elemento/read')
 			.then((response) => {
 				this.setState({
-					est: response.data
+					ele: response.data
+				});
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}
+
+	//read
+	readUsuario() {
+		axios
+			.get('api/usuario/read')
+			.then((response) => {
+				this.setState({
+					usu: response.data
 				});
 			})
 			.catch((error) => {
@@ -48,7 +64,7 @@ class TodoContextProvider extends Component {
 	createTodo(event, todo) {
 		event.preventDefault();
 		axios
-			.post('api/trabajo/create', todo)
+			.post('api/laboratorio/create', todo)
 			.then((response) => {
 				if (response.data.message.level === 'success') {
 					let data = [ ...this.state.todos ];
@@ -71,7 +87,7 @@ class TodoContextProvider extends Component {
 	//update
 	updateTodo(data) {
 		axios
-			.put('api/trabajo/update/' + data.id, data)
+			.put('api/laboratorio/update/' + data.id, data)
 			.then((response) => {
 				if (response.data.message.level === 'success') {
 					let todos = [ ...this.state.todos ];
@@ -79,9 +95,11 @@ class TodoContextProvider extends Component {
 						return todo.id === data.id;
 					});
 
-					todo.estudiante_id = response.data.todo.estudiante_id;
-					todo.registro = response.data.todo.registro;
-					todo.descripcion = response.data.todo.descripcion;
+					todo.usuario_id = response.data.todo.usuario_id;
+					todo.codlaboratorio = response.data.todo.codlaboratorio;
+					todo.nombre = response.data.todo.nombre;
+					todo.ubicacion = response.data.todo.ubicacion;
+					todo.observacion = response.data.todo.observacion;
 
 					this.setState({
 						message: response.data.message
@@ -100,7 +118,7 @@ class TodoContextProvider extends Component {
 	//delete
 	deleteTodo(data) {
 		axios
-			.delete('api/trabajo/delete/' + data.id)
+			.delete('api/laboratorio/delete/' + data.id)
 			.then((response) => {
 				if (response.data.message.level === 'success') {
 					let todos = [ ...this.state.todos ];

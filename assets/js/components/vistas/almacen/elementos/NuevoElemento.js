@@ -161,23 +161,6 @@ function NuevoElemento (){
                   )}
                 />
               </Grid>
-              
-              
-                <Grid item xs={6} md={4}>
-                <Autocomplete
-                  id="combo-box-demo"
-                  name="estado"
-                  options={context.todos}
-                  getOptionLabel={option => (option.codelemento+" - "+option.elemento)}
-                  renderInput={params => (
-                    <TextField
-                      {...params}
-                      label="Seleccione un elemento"/>
-                  )}
-                />
-              </Grid>
-          
-
               <Grid container spacing={2} justify="center">
                 <Grid item xs={3} md={3}>
                   <Button

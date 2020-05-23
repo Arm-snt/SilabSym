@@ -85,8 +85,8 @@ export default function SimpleTabs(onChangeTab) {
               indicatorColor="primary"
               textColor="primary"
             >
-              <Tab label="Estudiantes" {...a11yProps(0)} />
-              <Tab label="Nuevo Estudiante" {...a11yProps(1)} />
+              <Tab label="Nuevo Estudiante" {...a11yProps(0)} />
+              <Tab label="Estudiantes" {...a11yProps(1)} />
               <Tab label="Detalles Estudiante" {...a11yProps(2)} disabled />
               
             </Tabs>
@@ -95,10 +95,10 @@ export default function SimpleTabs(onChangeTab) {
               index={value}
               onChangeIndex={onChangeIndex}>
               <TabEstudiante value={value} index={0}>
-                <Estudiante/>
+                <Form/>
               </TabEstudiante>
               <TabEstudiante value={value} index={1}>
-                <Form/>    
+                <Estudiante/>
               </TabEstudiante>
               <TabEstudiante value={value} index={2}>
                 

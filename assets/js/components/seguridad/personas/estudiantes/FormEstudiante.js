@@ -16,7 +16,7 @@ import { TodoContext } from './TodoContext';
 
 const style = {
 	container: {
-		paddingTop: '20px'
+		padding: '20px'
 	},
 	paper: {
 		marginTop: 15,
