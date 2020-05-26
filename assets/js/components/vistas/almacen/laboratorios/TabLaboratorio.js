@@ -94,7 +94,9 @@ export default function SimpleTabs(onchangeTab) {
 								</TodoContextProvider>
 							</TabLaboratorio>
 							<TabLaboratorio value={value} index={1}>
-								<NuevoLaboratorio />
+								<TodoContextProvider>
+									<NuevoLaboratorio />
+								</TodoContextProvider>
 							</TabLaboratorio>
 							<TabLaboratorio value={value} index={2} />
 						</SwipeableViews>

@@ -2,6 +2,11 @@ import {Snackbar, SnackbarContent, Button} from '@material-ui/core'
 import React, {useContext, Fragment} from 'react';
 import {TodoContext} from './TodoContext';
 
+const style = {
+	snack: {
+		padding: '20px'
+    },
+};
 
 function checkLevel(level){
     switch (level) {
@@ -21,7 +26,7 @@ function EstSnackBar() {
     const context = useContext(TodoContext);
 
     return (
-        <Snackbar open={context.message.text !== undefined} autoHideDuration={6000}>            
+        <Snackbar open={context.message.text !== undefined} autoHideDuration={6000} style={style.snack}>            
             {context.message.text && (
                 <SnackbarContent style={{backgroundColor:checkLevel(context.message.level)}} message={context.message.text.map((text, index)=>(
                     <Fragment key={index+ ' ' +text}>                        

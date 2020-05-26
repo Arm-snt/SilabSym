@@ -1,268 +1,150 @@
-import React, { useState, Fragment } from "react";
-import {
-  Paper,
-  Divider,
-  Grid,
-  Breadcrumbs,
-  Link,
-  IconButton,
-  Collapse,
-  Typography,
-  TextField,
-  Button
-} from "@material-ui/core";
-import HomeIcon from "@material-ui/icons/Home";
-import { Alert, Autocomplete } from "@material-ui/lab";
-import { Close as CloseIcon } from "@material-ui/icons";
-//import fotoUsuarioTemp from "../../../logo.svg";
-//import ImageUploader from "react-images-upload";
-import { v4 as uuidv4 } from "uuid";
-import PropTypes from "prop-types";
+import React, { useContext, useState } from 'react';
+import { Container, Paper, Grid, TextField, Button } from '@material-ui/core';
+import { Autocomplete } from '@material-ui/lab';
+import { TodoContext } from './TodoContext';
 
 const style = {
-  container: {
-    paddingTop: "20px"
-  },
-  paper: {
-    marginTop: 8,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "20px",
-    backgroundColor: "#f5f5f5"
-  },
-  link: {
-    display: "flex"
-  },
-  homeIcon: {
-    width: 20,
-    height: 20,
-    marginRight: "4px"
-  },
-  form: {
-    width: "100%"
-  },
-  submit: {
-    marginTop: 20,
-    marginBottom: 20
-  },
-  foto: {
-    height: "100px"
-  },
-  avatar: {
-    margin: 25,
-    backgroundColor: "#e53935"
-  },
-  error: {
-    marginTop: 20,
-    marginBottom: 20
-  },
-  grid: {
-    marginBottom: 20,
-    marginTop: 30,
-    backgroundColor: "#fff",
-    borderRadius: "5px"
-  }
+	container: {
+		padding: '20px'
+	},
+	paper: {
+		marginTop: 15,
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+		padding: '20px',
+		backgroundColor: '#f5f5f5'
+	},
+	form: {
+		width: '100%'
+	},
+	submit: {
+		marginTop: 20,
+		marginBottom: 20
+	},
+	space: {
+		paddingTop: '20px'
+	}
 };
 
-const NuevoLaboratorio = ({ agregarLaboratorio }) => {
-  //crear state de usuario
-  const [laboratorio, cambiarLaboratorio] = useState({
-    codigo: "",
-    nombre: "",
-    ubicacion: "",
-    observacion: "",
-    registro: "",
-    elemento: ""
-  });
+function NuevoLaboratorio() {
+	const context = useContext(TodoContext);
+	const [ addUsuario_id, setaddUsuario_id ] = useState('');
+	const [ addCodLaboratorio, setaddCodLaboratorio ] = useState('');
+	const [ addNombre, setaddNombre ] = useState('');
+	const [ addUbicacion, setaddUbicacion ] = useState('');
+	const [ addObservacion, setaddObservacion ] = useState('');
+	const [ clear, setClear ] = useState(false);
 
-  //crear state de error
-  const [error, actualizarError] = useState(false);
+	const onCreateSubmit = (event) => {
+		event.preventDefault();
+		context.createTodo(event, {
+			usuario_id: addUsuario_id,
+			codlaboratorio: addCodLaboratorio,
+			nombre: addNombre,
+			ubicacion: addUbicacion,
+			observacion: addObservacion
+		});
+		setaddUsuario_id('');
+		setaddCodLaboratorio('');
+		setaddNombre('');
+		setaddUbicacion('');
+		setaddObservacion('');
+	};
 
-  //funcion para cuando el usuario escribe en los inputs
-  const cambiarDato = e => {
-    const { name, value } = e.target;
-    cambiarLaboratorio(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+	function historyBack() {
+		window.history.back();
+	}
 
-  //Extraer los valores de los inputs
-  const {
-    codigo,
-    nombre,
-    ubicacion,
-    observacion,
-    registro,
-    elemento
-  } = laboratorio;
+	return (
+		<Container style={style.container} component="main" maxWidth="lg" justify="center">
+			<Paper style={style.paper}>
+				<form style={style.form}>
+					<Grid container spacing={2}>
+						<Grid item md={6} xs={6}>
+							<TextField
+								type="text"
+								value={addCodLaboratorio}
+								onChange={(event) => {
+									setaddCodLaboratorio(event.target.value);
+								}}
+								fullWidth={true}
+								label="Código Laboratorio"
+							/>
+						</Grid>
+						<Grid item md={6} xs={6}>
+							<TextField
+								type="text"
+								value={addNombre}
+								onChange={(event) => {
+									setaddNombre(event.target.value);
+								}}
+								fullWidth={true}
+								label="Nombre Laboratorio"
+							/>
+						</Grid>
+						<Grid item md={6} xs={6}>
+							<TextField
+								type="text"
+								value={addUbicacion}
+								onChange={(event) => {
+									setaddUbicacion(event.target.value);
+								}}
+								fullWidth={true}
+								label="Ubicación Laboratorio"
+							/>
+						</Grid>
+						<Grid item md={6} xs={6}>
+							<TextField
+								type="text"
+								value={addObservacion}
+								onChange={(event) => {
+									setaddObservacion(event.target.value);
+								}}
+								fullWidth={true}
+								label="Observación"
+							/>
+						</Grid>
+						<Grid item md={6} xs={6}>
+							<Autocomplete
+								id="combo-box-demo"
+								options={context.usu}
+								onChange={(e, a) => {
+									setaddUsuario_id(a !== null ? a.id : '');
+								}}
+								getOptionLabel={(option) => option.codusuario + ' - ' + option.nombre}
+								renderInput={(params) => <TextField {...params} label="Encargado" />}
+							/>
+						</Grid>
+						<Grid item xs={6} md={2}>
+							<Button
+								variant="contained"
+								fullWidth
+								size="medium"
+								color="primary"
+								style={style.submit}
+								onClick={onCreateSubmit}
+							>
+								Guardar
+							</Button>
+						</Grid>
+						<Grid item xs={2} md={2}>
+							<Button
+								variant="contained"
+								fullWidth
+								size="medium"
+								color="secondary"
+								style={style.submit}
+								onClick={historyBack}
+							>
+								Cancelar
+							</Button>
+						</Grid>
+					</Grid>
+				</form>
+			</Paper>
+		</Container>
+	);
+}
 
-  //funcion para cuando el usuario envia la informacion
-  const submitLaboratorio = e => {
-    e.preventDefault();
-
-    //Validar
-    if (
-      codigo === "" ||
-      nombre === "" ||
-      ubicacion === "" ||
-      observacion === "" ||
-      registro === "" ||
-      elemento === ""
-    ) {
-      actualizarError(true);
-      return;
-    }
-
-    //Eliminar el msj previo
-    actualizarError(false);
-
-    //Asignar Id
-    laboratorio.id = uuidv4();
-    console.log(laboratorio);
-
-    //Crear laboratorio
-    agregarLaboratorio(laboratorio);
-
-    //Reiniciar el form
-    cambiarLaboratorio({
-      codigo: "",
-      nombre: "",
-      ubicacion: "",
-      observacion: "",
-      registro: "",
-      elemento: ""
-    });
-  };
-
-  function historyBack() {
-    window.history.back();
-  }
-
-  const element = [
-    { state: "455895 - Resistencia 2k" },
-    { state: "859565 - Computador Dell" },
-    { state: "213654 - Impresora Epson" }
-  ];
-
-  return (
-    <Fragment>
-      <Paper style={style.paper}>
-        <form style={style.form} onSubmit={submitLaboratorio}>
-          <Grid container spacing={2}>
-            <Grid item md={6} xs={6}>
-              <TextField
-                name="codigo"
-                value={codigo}
-                onChange={cambiarDato}
-                fullWidth
-                label="Código"
-              />
-            </Grid>
-            <Grid item md={6} xs={6}>
-              <TextField
-                name="nombre"
-                value={nombre}
-                onChange={cambiarDato}
-                fullWidth
-                label="Nombre"
-              />
-            </Grid>
-            <Grid item md={6} xs={6}>
-              <TextField
-                name="ubicacion"
-                value={ubicacion}
-                onChange={cambiarDato}
-                fullWidth
-                label="Ubicación"
-              />
-            </Grid>
-            <Grid item md={6} xs={6}>
-              <TextField
-                name="observacion"
-                value={observacion}
-                onChange={cambiarDato}
-                fullWidth
-                multiline
-                label="Observaciones"
-              />
-            </Grid>
-
-            <Grid item md={6} xs={6}>
-              <TextField
-                name="registro"
-                value={registro}
-                onChange={cambiarDato}
-                fullWidth
-                label="Registrado Por"
-              />
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} style={style.grid}>
-            <Grid item md={12} xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={6} md={6}>
-              <Autocomplete
-                id="elemento"
-                name="elemento"
-                options={element}
-                onChange={(event, value) => {
-                  let valor;
-                  if (value !== null) {
-                    valor = value.state;
-                  } else {
-                    valor = "";
-                  }
-                  cambiarLaboratorio(prev => ({
-                    ...prev,
-                    elemento: valor
-                  }));
-                }}
-                getOptionLabel={option => option.state}
-                renderInput={params => (
-                  <TextField {...params} label="Cargar elementos" />
-                )}
-              />
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                size="small"
-                color="primary"
-                style={style.submit}
-              >
-                Guardar
-              </Button>
-            </Grid>
-            <Grid item xs={6} md={2}>
-              <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                size="small"
-                color="secondary"
-                style={style.submit}
-                onClick={historyBack}
-              >
-                Cancelar
-              </Button>
-            </Grid>
-
-            <Grid item md={12} xs={12}>
-              <Divider />
-            </Grid>
-          </Grid>
-        </form>
-      </Paper>
-    </Fragment>
-  );
-};
-
-NuevoLaboratorio.propTypes = {
-  agregarLaboratorio: PropTypes.func.isRequired
-};
 export default NuevoLaboratorio;

@@ -1,16 +1,5 @@
-import React, { useContext, useState, Fragment } from 'react';
-import {
-	Container,
-	Paper,
-	Grid,
-	Breadcrumbs,
-	Link,
-	Typography,
-	TextField,
-	IconButton,
-	Divider,
-	Button
-} from '@material-ui/core';
+import React, { useContext, useState } from 'react';
+import { Container,Paper,Grid,TextField,Button } from '@material-ui/core';
 import { Autocomplete } from '@material-ui/lab';
 import { TodoContext } from './TodoContext';
 
@@ -25,9 +14,6 @@ const style = {
 		alignItems: 'center',
 		padding: '20px',
 		backgroundColor: '#f5f5f5'
-	},
-	link: {
-		display: 'flex'
 	},
 	form: {
 		width: '100%'

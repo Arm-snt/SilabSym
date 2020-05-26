@@ -60,7 +60,7 @@ class LaboratorioController extends AbstractController
                 ]);
         }  
             return $this->json([
-                'message' => ['text'=>['El laboratorio de '.$estudiante_id, 'se ha registrado!' ] , 'level'=>'success']      
+                'message' => ['text'=>['El laboratorio de '.$nombre, 'se ha registrado!' ] , 'level'=>'success']      
                  ]);
     }
 

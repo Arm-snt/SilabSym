@@ -124,9 +124,6 @@ function Laboratorios() {
 						<TableHead style={style.tableHead}>
 							<TableRow>
 								<TableCell style={style.tableCell} align="center">
-									Laboratorista
-								</TableCell>
-								<TableCell style={style.tableCell} align="center">
 									Laboratorio
 								</TableCell>
 								<TableCell style={style.tableCell} align="center">
@@ -139,6 +136,9 @@ function Laboratorios() {
 									Observación
 								</TableCell>
 								<TableCell style={style.tableCell} align="center">
+									Laboratorista
+								</TableCell>
+								<TableCell style={style.tableCell} align="center">
 									Opciones
 								</TableCell>
 							</TableRow>
@@ -149,29 +149,7 @@ function Laboratorios() {
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.reverse()
 								.map((todo, index) => (
-									<TableRow key={'todo ' + index}>
-										{/*USUARIO*/}
-										<TableCell align="center">
-											{editIsShown === todo.id ? (
-												<form onSubmit={onEditSubmit.bind(this, todo.id)}>
-													<Autocomplete
-														fullWidth={true}
-														options={context.usu}
-														onChange={(e, a) => {
-															seteditUsuario(a !== null ? a.id : '');
-														}}
-														getOptionLabel={(option) =>
-															option.codusuario + ' - ' + option.usuario}
-														renderInput={(params) => (
-															<TextField {...params} label="Laboratorista" />
-														)}
-													/>
-												</form>
-											) : (
-												<Typography>{todo.codusuario + ' - ' + todo.usuario}</Typography>
-											)}
-										</TableCell>
-
+									<TableRow key={'todo ' + index}>										
 										{/*NOMBRE*/}
 										<TableCell align="center">
 											{editIsShown === todo.id ? (
@@ -241,6 +219,28 @@ function Laboratorios() {
 												<Typography style={{ whiteSpace: 'pre-wrap' }}>
 													{todo.observacion}
 												</Typography>
+											)}
+										</TableCell>
+										
+										{/*USUARIO*/}
+										<TableCell align="center">
+											{editIsShown === todo.id ? (
+												<form onSubmit={onEditSubmit.bind(this, todo.id)}>
+													<Autocomplete
+														fullWidth={true}
+														options={context.usu}
+														onChange={(e, a) => {
+															seteditUsuario(a !== null ? a.id : '');
+														}}
+														getOptionLabel={(option) =>
+															option.codusuario + ' - ' + option.usuario}
+														renderInput={(params) => (
+															<TextField {...params} label="Laboratorista" />
+														)}
+													/>
+												</form>
+											) : (
+												<Typography>{todo.codusuario + ' - ' + todo.usuario}</Typography>
 											)}
 										</TableCell>
 
