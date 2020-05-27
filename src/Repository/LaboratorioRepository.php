@@ -22,9 +22,9 @@ class LaboratorioRepository extends ServiceEntityRepository
     public function Mostrar(){
         try {
             $conn = $this->getEntityManager()->getConnection();
-            $stm = $conn->prepare(" SELECT lab.id, lab.codlaboratorio, lab.nombre, lab.ubicacion, lab.observacion, ele.id, ele.elemento, usu.id, usu.codusuario, usu.usuario
+            $stm = $conn->prepare("SELECT lab.id, lab.codlaboratorio, lab.nombre, lab.ubicacion, lab.observacion, ele.id, ele.elemento, usu.id, usu.codusuario, usu.usuario
             FROM laboratorio lab, elemento ele, usuario usu
-            WHERE lab.usuario_id=usu.id AND ele.laboratorio_id=lab.id AND usu.tipousuario='Laboratorista'");
+            WHERE lab.usuario_id=usu.id AND usu.tipousuario='Laboratorista' AND ele.laboratorio_id = lab.id GROUP BY lab.id ORDER BY lab.nombre");
             $stm->execute([]);
             $res = $stm->fetchAll();
             return $res;
