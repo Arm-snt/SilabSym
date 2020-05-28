@@ -75,31 +75,13 @@ const style = {
 	}
 };
 
-function Laboratorios() {
+function Laboratorios(props) {
+	const onChangeIndex = props.onChangeIndex;
 	const context = useContext(TodoContext);
-	const [ editIsShown, setEditIsShown ] = useState(false);
-	const [ editUsuario, seteditUsuario ] = useState('');
-	const [ editCodigo, seteditCodigo ] = useState('');
-	const [ editNombre, seteditNombre ] = useState('');
-	const [ editUbicacion, seteditUbicacion ] = useState('');
-	const [ editObservacion, seteditObservacion ] = useState('');
 	const [ deleteConfirmationIsShown, setDeleteConfirmationIsShown ] = useState(false);
 	const [ todoToBeDeleted, setTodoToBeDeleted ] = useState(null);
 	const [ page, setPage ] = React.useState(0);
 	const [ rowsPerPage, setRowsPerPage ] = React.useState(5);
-
-	const onEditSubmit = (todoId, event) => {
-		event.preventDefault();
-		context.updateTodo({
-			id: todoId,
-			usuario_id: editUsuario,
-			codlaboratorio: editCodigo,
-			nombre: editNombre,
-			ubicacion: editUbicacion,
-			observacion: editObservacion
-		});
-		setEditIsShown(false);
-	};
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -149,141 +131,54 @@ function Laboratorios() {
 								.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 								.reverse()
 								.map((todo, index) => (
-									<TableRow key={'todo ' + index}>										
+									<TableRow key={'todo ' + index}>
 										{/*NOMBRE*/}
 										<TableCell align="center">
-											{editIsShown === todo.id ? (
-												<form onSubmit={onEditSubmit.bind(this, todo.id)}>
-													<TextField
-														type="text"
-														fullWidth={true}
-														value={editNombre}
-														onChange={(event) => seteditNombre(event.target.value)}
-													/>
-												</form>
-											) : (
-												<Typography style={{ whiteSpace: 'pre-wrap' }}>
-													{todo.nombre}
-												</Typography>
-											)}
+											<Typography style={{ whiteSpace: 'pre-wrap' }}>{todo.nombre}</Typography>
 										</TableCell>
 
 										<TableCell align="center">
-											{editIsShown === todo.id ? (
-												<form onSubmit={onEditSubmit.bind(this, todo.id)}>
-													<TextField
-														type="text"
-														fullWidth={true}
-														autoFocus={true}
-														value={editCodigo}
-														onChange={(event) => {
-															seteditCodigo(event.target.value);
-														}}
-													/>
-												</form>
-											) : (
-												<Typography>{todo.codlaboratorio}</Typography>
-											)}
+											<Typography>{todo.codlaboratorio}</Typography>
 										</TableCell>
-
 										{/*UBICACIÓN*/}
 										<TableCell align="center">
-											{editIsShown === todo.id ? (
-												<form onSubmit={onEditSubmit.bind(this, todo.id)}>
-													<TextField
-														type="text"
-														fullWidth={true}
-														value={editUbicacion}
-														onChange={(event) => seteditUbicacion(event.target.value)}
-													/>
-												</form>
-											) : (
-												<Typography style={{ whiteSpace: 'pre-wrap' }}>
-													{todo.ubicacion}
-												</Typography>
-											)}
+											<Typography style={{ whiteSpace: 'pre-wrap' }}>{todo.ubicacion}</Typography>
 										</TableCell>
-
 										{/*OBSERVACIÓN*/}
 										<TableCell align="center">
-											{editIsShown === todo.id ? (
-												<form onSubmit={onEditSubmit.bind(this, todo.id)}>
-													<TextField
-														type="text"
-														fullWidth={true}
-														value={editObservacion}
-														onChange={(event) => seteditObservacion(event.target.value)}
-													/>
-												</form>
-											) : (
-												<Typography style={{ whiteSpace: 'pre-wrap' }}>
-													{todo.observacion}
-												</Typography>
-											)}
-										</TableCell>
-										
-										{/*USUARIO*/}
-										<TableCell align="center">
-											{editIsShown === todo.id ? (
-												<form onSubmit={onEditSubmit.bind(this, todo.id)}>
-													<Autocomplete
-														fullWidth={true}
-														options={context.usu}
-														onChange={(e, a) => {
-															seteditUsuario(a !== null ? a.id : '');
-														}}
-														getOptionLabel={(option) =>
-															option.codusuario + ' - ' + option.usuario}
-														renderInput={(params) => (
-															<TextField {...params} label="Laboratorista" />
-														)}
-													/>
-												</form>
-											) : (
-												<Typography>{todo.codusuario + ' - ' + todo.usuario}</Typography>
-											)}
+											<Typography style={{ whiteSpace: 'pre-wrap' }}>
+												{todo.observacion}
+											</Typography>
 										</TableCell>
 
+										{/*USUARIO*/}
+										<TableCell align="center">
+											<Typography>{todo.codusuario + ' - ' + todo.usuario}</Typography>
+										</TableCell>
 										<TableCell align="right">
-											{editIsShown === todo.id ? (
-												<Fragment>
-													<IconButton onClick={onEditSubmit.bind(this, todo.id)}>
-														<DoneIcon />
-													</IconButton>
-													<IconButton onClick={() => setEditIsShown(false)}>
-														<CloseIcon />
-													</IconButton>
-												</Fragment>
-											) : (
-												<Fragment>
-													<IconButton>
-														<Icon
-															path={mdiCircleEditOutline}
-															size={1}
-															color="red"
-															onClick={() => {
-																setEditIsShown(todo.id);
-																seteditUsuario(todo.usuario_id);
-																seteditNombre(todo.nombre);
-																seteditCodigo(todo.codlaboratorio);
-																seteditUbicacion(todo.ubicacion);
-																seteditObservacion(todo.observacion);
-															}}
-														/>
-													</IconButton>
-													<IconButton
-														color="primary"
-														aria-label="upload picture"
-														component="span"
-														onClick={() => {
-															setDeleteConfirmationIsShown(true);
-															setTodoToBeDeleted(todo);
+											<Fragment>
+												<IconButton>
+													<Icon
+														path={mdiCircleEditOutline}
+														size={1}
+														color="red"
+														onClick={(e) => {
+															onChangeIndex(2, todo, e);
 														}}
-													>
-														<CancelRounded fontSize="inherit" />
-													</IconButton>
-												</Fragment>
-											)}
+													/>
+												</IconButton>
+												<IconButton
+													color="primary"
+													aria-label="upload picture"
+													component="span"
+													onClick={() => {
+														setDeleteConfirmationIsShown(true);
+														setTodoToBeDeleted(todo);
+													}}
+												>
+													<CancelRounded fontSize="inherit" />
+												</IconButton>
+											</Fragment>
 										</TableCell>
 									</TableRow>
 								))}

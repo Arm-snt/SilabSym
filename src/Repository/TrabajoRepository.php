@@ -61,7 +61,6 @@ class TrabajoRepository extends ServiceEntityRepository
             return $e;
         }
     }
-
     
     public function Actualizar($id,$estudiante_id,$registro,$descripcion){
         try {

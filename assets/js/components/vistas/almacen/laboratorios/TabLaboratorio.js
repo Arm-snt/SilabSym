@@ -8,10 +8,10 @@ import Box from '@material-ui/core/Box';
 import { Container, Paper } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
 import TodoContextProvider from './TodoContext';
-//import EstSnackBar from "./EstSnackBar";
+import EstSnackBar from './EstSnackBar';
 import Laboratorios from './Laboratorios';
 import NuevoLaboratorio from './NuevoLaboratorio';
-//import DetallesLaboratorio from './DetallesLaboratorio';
+import DetallesLaboratorio from './DetallesLaboratorio';
 
 function TabLaboratorio(props) {
 	const { children, value, index, ...other } = props;
@@ -64,13 +64,15 @@ export default function SimpleTabs(onchangeTab) {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [ value, setValue ] = React.useState(0);
+	const [ data, setData ] = React.useState('');
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 
-	const onChangeIndex = (index) => {
+	const onChangeIndex = (index, data) => {
 		setValue(index);
+		setData(data);
 	};
 
 	return (
@@ -81,7 +83,7 @@ export default function SimpleTabs(onchangeTab) {
 						<Tabs value={value} onChange={handleChange} indicatorColor="primary" textColor="primary">
 							<Tab label="Laboratorios" {...a11yProps(0)} />
 							<Tab label="Nuevo Laboratorio" {...a11yProps(1)} />
-							<Tab label="Detalles Laboratorio" {...a11yProps(2)} disabled />
+							<Tab label="Detalles Laboratorio" {...a11yProps(2)} />
 						</Tabs>
 						<SwipeableViews
 							axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
@@ -90,15 +92,21 @@ export default function SimpleTabs(onchangeTab) {
 						>
 							<TabLaboratorio value={value} index={0}>
 								<TodoContextProvider>
-									<Laboratorios />
+									<Laboratorios onChangeIndex={onChangeIndex} />
+									<EstSnackBar />
 								</TodoContextProvider>
 							</TabLaboratorio>
 							<TabLaboratorio value={value} index={1}>
 								<TodoContextProvider>
 									<NuevoLaboratorio />
+									<EstSnackBar />
 								</TodoContextProvider>
 							</TabLaboratorio>
-							<TabLaboratorio value={value} index={2} />
+							<TabLaboratorio value={value} index={2}>
+								<TodoContextProvider>
+									<DetallesLaboratorio data={data} />
+								</TodoContextProvider>
+							</TabLaboratorio>
 						</SwipeableViews>
 					</div>
 				</Paper>

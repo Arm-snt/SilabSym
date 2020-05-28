@@ -92,8 +92,10 @@ class TrabajoController extends AbstractController
         }
 
         try {
-
+            $todo = $this->getDoctrine()->getRepository(Trabajo::class, 'default');
             $todo = $this->trabajoRepository->Actualizar($id,$estudiante_id,$registro,$descripcion);
+            $todo = $this->trabajoRepository->Buscar($id,$estudiante_id,$registro,$descripcion);
+
         } catch (Exception $exception) {
             return $this->json([ 
                 'message' => ['text'=>['No se pudo acceder a la Base de datos mientras se actualizaba el trabajo!'] , 'level'=>'error']
@@ -101,7 +103,8 @@ class TrabajoController extends AbstractController
         }
  
         return $this->json([
-            'message' => ['text'=>['El trabajo se ha actualizado!' ] , 'level'=>'success']      
+            'todo'    => $todo,
+            'message' => ['text'=>['El trabajo del estudiante '.$todo['nombre'], ' se ha actualizado' ] , 'level'=>'success']      
         ]);
  
     }
